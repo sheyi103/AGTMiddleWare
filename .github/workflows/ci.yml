@@ -35,11 +35,11 @@ jobs:
     #       MYSQL_ROOT_PASSWORD: secret
     #       MYSQL_DATABASE: agt_middleware_db
 
-      adminer:
-        image: adminer
-        restart: always
-        ports:
-          - 8080:8080
+      # adminer:
+      #   image: adminer
+      #   restart: always
+      #   ports:
+      #     - 8080:8080
 
     steps:
 
