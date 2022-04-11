@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"testing"
 
-	"github.com/sheyi103/agtMiddleware/db/util"
+	"github.com/sheyi103/agtMiddleware/util"
 	"github.com/stretchr/testify/require"
 )
 
@@ -56,12 +56,12 @@ func TestUpdateRole(t *testing.T) {
 
 }
 
-func TestListRoles(t *testing.T){
-	for i :=0; i < 10; i++ {
+func TestListRoles(t *testing.T) {
+	for i := 0; i < 10; i++ {
 		createRandomRole(t)
 	}
 	arg := ListRolesParams{
-		Limit: 5,
+		Limit:  5,
 		Offset: 5,
 	}
 
@@ -74,7 +74,7 @@ func TestListRoles(t *testing.T){
 	}
 }
 
-func TestDeleteAccount(t *testing.T){
+func TestDeleteAccount(t *testing.T) {
 	role1 := createRandomRole(t)
 	err := testQueries.DeleteRole(context.Background(), int32(role1))
 	require.NoError(t, err)
