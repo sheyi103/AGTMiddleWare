@@ -52,7 +52,7 @@ jobs:
 
     - name: Golang-Migrate CLI tool
       run: |
-          curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.1/migrate.linux-amd64.deb | tar xvz
+          curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.1/migrate.linux-amd64.deb
           sudo mv migrate.linux-amd64 /usr/bin/migrate
           which migrate
       
