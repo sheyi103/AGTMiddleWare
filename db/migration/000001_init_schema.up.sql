@@ -16,7 +16,6 @@ CREATE TABLE `users` (
   `email` varchar(255) UNIQUE NOT NULL,
   `phone_number` varchar(255) NOT NULL,
   `contact_person` varchar(255) NOT NULL,
-  `role_id` int NOT NULL,
   `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -27,6 +26,7 @@ CREATE TABLE `user_credentials` (
   `client_secret` varchar(255) NOT NULL,
   `shortcode_id` int NOT NULL,
   `user_id` int NOT NULL,
+  `role_id` int NOT NULL,
   `service_name` varchar(255),
   `service_id` varchar(255),
   `service` ENUM ('SMS', 'USSD', 'VOICE'),
@@ -43,7 +43,7 @@ CREATE TABLE `user_credentials` (
   `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-ALTER TABLE `users` ADD FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
+ALTER TABLE `user_credentials` ADD FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
 
 ALTER TABLE `user_credentials` ADD FOREIGN KEY (`shortcode_id`) REFERENCES `short_codes` (`id`);
 
