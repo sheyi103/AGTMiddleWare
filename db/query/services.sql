@@ -1,0 +1,25 @@
+-- name: CreateService :execresult
+INSERT INTO services (
+  client_id, client_secret, shortcode_id, user_id, role_id, service_name, service_id, service, service_type, product_id, node_id, subscription_id, subscription_description, base_url, datasync_endpoint, notification_endpoint, network_type
+) VALUES (
+  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?
+);
+
+-- name: GetService :one
+SELECT * FROM services
+WHERE id = ? LIMIT 1;
+
+-- name: ListService :many
+SELECT * FROM services
+ORDER BY id
+LIMIT ?
+OFFSET ?;
+
+
+-- name: UpdateService :execresult
+UPDATE services SET  service_name= ?, base_url= ?, datasync_endpoint = ?, notification_endpoint = ?
+WHERE id = ?;
+
+-- name: DeleteService :exec
+DELETE FROM services
+WHERE id = ?;

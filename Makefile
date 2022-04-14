@@ -5,10 +5,10 @@ createdb:
 	docker exec -it mysql mysql -uroot -psecret -e "create database agt_middleware_db;"
 
 migrateup:
-	migrate -path db/migration  -database "mysql://agt:Password123@tcp(localhost:3306)/agt_middleware_db" -verbose up
+	migrate -path db/migration  -database "mysql://root:secret@tcp(localhost:3306)/agt_middleware_db" -verbose up
 
 migratedown:
-	migrate -path db/migration  -database "mysql://agt:Password123@tcp(localhost:3306)/agt_middleware_db" -verbose down
+	migrate -path db/migration  -database "mysql://root:secret@tcp(localhost:3306)/agt_middleware_db" -verbose down
 dropdb:
 	docker exec -it mysql mysql -uroot -psecret -e "drop database agt_middleware_db;"
 
@@ -18,4 +18,7 @@ sqlc:
 test: 
 	go test -v -cover ./...
 
-.PHONY: mysql createdb dropdb migrateup migratedown sqlc test
+server:
+	go run main.go
+
+.PHONY: mysql createdb dropdb migrateup migratedown sqlc test server

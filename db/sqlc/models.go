@@ -9,64 +9,85 @@ import (
 	"fmt"
 )
 
-type UserCredentialsNetworkType string
+type ServicesNetworkType string
 
 const (
-	UserCredentialsNetworkTypeMTN     UserCredentialsNetworkType = "MTN"
-	UserCredentialsNetworkTypeAIRTEL  UserCredentialsNetworkType = "AIRTEL"
-	UserCredentialsNetworkTypeGLO     UserCredentialsNetworkType = "GLO"
-	UserCredentialsNetworkType9MOBILE UserCredentialsNetworkType = "9MOBILE"
+	ServicesNetworkTypeMTN     ServicesNetworkType = "MTN"
+	ServicesNetworkTypeAIRTEL  ServicesNetworkType = "AIRTEL"
+	ServicesNetworkTypeGLO     ServicesNetworkType = "GLO"
+	ServicesNetworkType9MOBILE ServicesNetworkType = "9MOBILE"
 )
 
-func (e *UserCredentialsNetworkType) Scan(src interface{}) error {
+func (e *ServicesNetworkType) Scan(src interface{}) error {
 	switch s := src.(type) {
 	case []byte:
-		*e = UserCredentialsNetworkType(s)
+		*e = ServicesNetworkType(s)
 	case string:
-		*e = UserCredentialsNetworkType(s)
+		*e = ServicesNetworkType(s)
 	default:
-		return fmt.Errorf("unsupported scan type for UserCredentialsNetworkType: %T", src)
+		return fmt.Errorf("unsupported scan type for ServicesNetworkType: %T", src)
 	}
 	return nil
 }
 
-type UserCredentialsService string
+type ServicesService string
 
 const (
-	UserCredentialsServiceSMS   UserCredentialsService = "SMS"
-	UserCredentialsServiceUSSD  UserCredentialsService = "USSD"
-	UserCredentialsServiceVOICE UserCredentialsService = "VOICE"
+	ServicesServiceSMS          ServicesService = "SMS"
+	ServicesServiceUSSD         ServicesService = "USSD"
+	ServicesServiceVOICE        ServicesService = "VOICE"
+	ServicesServiceSUBSCRIPTION ServicesService = "SUBSCRIPTION"
 )
 
-func (e *UserCredentialsService) Scan(src interface{}) error {
+func (e *ServicesService) Scan(src interface{}) error {
 	switch s := src.(type) {
 	case []byte:
-		*e = UserCredentialsService(s)
+		*e = ServicesService(s)
 	case string:
-		*e = UserCredentialsService(s)
+		*e = ServicesService(s)
 	default:
-		return fmt.Errorf("unsupported scan type for UserCredentialsService: %T", src)
+		return fmt.Errorf("unsupported scan type for ServicesService: %T", src)
 	}
 	return nil
 }
 
-type UserCredentialsServiceType string
+type ServicesServiceInterface string
 
 const (
-	UserCredentialsServiceTypeDAILY    UserCredentialsServiceType = "DAILY"
-	UserCredentialsServiceTypeWEEKLY   UserCredentialsServiceType = "WEEKLY"
-	UserCredentialsServiceTypeMONTHLY  UserCredentialsServiceType = "MONTHLY"
-	UserCredentialsServiceTypeONDEMAND UserCredentialsServiceType = "ON_DEMAND"
+	ServicesServiceInterfaceSOAP ServicesServiceInterface = "SOAP"
+	ServicesServiceInterfaceHTTP ServicesServiceInterface = "HTTP"
+	ServicesServiceInterfaceSMPP ServicesServiceInterface = "SMPP"
 )
 
-func (e *UserCredentialsServiceType) Scan(src interface{}) error {
+func (e *ServicesServiceInterface) Scan(src interface{}) error {
 	switch s := src.(type) {
 	case []byte:
-		*e = UserCredentialsServiceType(s)
+		*e = ServicesServiceInterface(s)
 	case string:
-		*e = UserCredentialsServiceType(s)
+		*e = ServicesServiceInterface(s)
 	default:
-		return fmt.Errorf("unsupported scan type for UserCredentialsServiceType: %T", src)
+		return fmt.Errorf("unsupported scan type for ServicesServiceInterface: %T", src)
+	}
+	return nil
+}
+
+type ServicesServiceType string
+
+const (
+	ServicesServiceTypeDAILY    ServicesServiceType = "DAILY"
+	ServicesServiceTypeWEEKLY   ServicesServiceType = "WEEKLY"
+	ServicesServiceTypeMONTHLY  ServicesServiceType = "MONTHLY"
+	ServicesServiceTypeONDEMAND ServicesServiceType = "ON-DEMAND"
+)
+
+func (e *ServicesServiceType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = ServicesServiceType(s)
+	case string:
+		*e = ServicesServiceType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for ServicesServiceType: %T", src)
 	}
 	return nil
 }
@@ -75,6 +96,30 @@ type Role struct {
 	ID        int32        `json:"id"`
 	Name      string       `json:"name"`
 	CreatedAt sql.NullTime `json:"created_at"`
+}
+
+type Service struct {
+	ID                      int32                    `json:"id"`
+	ClientID                string                   `json:"client_id"`
+	ClientSecret            string                   `json:"client_secret"`
+	ShortcodeID             int32                    `json:"shortcode_id"`
+	UserID                  int32                    `json:"user_id"`
+	RoleID                  int32                    `json:"role_id"`
+	ServiceName             sql.NullString           `json:"service_name"`
+	ServiceID               sql.NullString           `json:"service_id"`
+	ServiceInterface        ServicesServiceInterface `json:"service_interface"`
+	Service                 ServicesService          `json:"service"`
+	ServiceType             ServicesServiceType      `json:"service_type"`
+	ProductID               sql.NullString           `json:"product_id"`
+	NodeID                  sql.NullString           `json:"node_id"`
+	SubscriptionID          sql.NullString           `json:"subscription_id"`
+	SubscriptionDescription sql.NullString           `json:"subscription_description"`
+	BaseUrl                 sql.NullString           `json:"base_url"`
+	DatasyncEndpoint        sql.NullString           `json:"datasync_endpoint"`
+	NotificationEndpoint    sql.NullString           `json:"notification_endpoint"`
+	NetworkType             ServicesNetworkType      `json:"network_type"`
+	CreatedAt               sql.NullTime             `json:"created_at"`
+	UpdatedAt               sql.NullTime             `json:"updated_at"`
 }
 
 type ShortCode struct {
@@ -92,26 +137,4 @@ type User struct {
 	RoleID        int32        `json:"role_id"`
 	CreatedAt     sql.NullTime `json:"created_at"`
 	UpdatedAt     sql.NullTime `json:"updated_at"`
-}
-
-type UserCredential struct {
-	ID                      int32                      `json:"id"`
-	ClientID                string                     `json:"client_id"`
-	ClientSecret            string                     `json:"client_secret"`
-	ShortcodeID             int32                      `json:"shortcode_id"`
-	UserID                  int32                      `json:"user_id"`
-	ServiceName             sql.NullString             `json:"service_name"`
-	ServiceID               sql.NullString             `json:"service_id"`
-	Service                 UserCredentialsService     `json:"service"`
-	ServiceType             UserCredentialsServiceType `json:"service_type"`
-	ProductID               sql.NullString             `json:"product_id"`
-	NodeID                  sql.NullString             `json:"node_id"`
-	SubscriptionID          sql.NullString             `json:"subscription_id"`
-	SubscriptionDescription sql.NullString             `json:"subscription_description"`
-	BaseUrl                 sql.NullString             `json:"base_url"`
-	DatasynEndpoint         sql.NullString             `json:"datasyn_endpoint"`
-	NotificationEndpoint    sql.NullString             `json:"notification_endpoint"`
-	NetworkType             UserCredentialsNetworkType `json:"network_type"`
-	CreatedAt               sql.NullTime               `json:"created_at"`
-	UpdatedAt               sql.NullTime               `json:"updated_at"`
 }
