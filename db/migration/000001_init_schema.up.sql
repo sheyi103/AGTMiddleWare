@@ -13,6 +13,7 @@ CREATE TABLE `short_codes` (
 CREATE TABLE `users` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `email` varchar(255) UNIQUE NOT NULL,
   `phone_number` varchar(255) NOT NULL,
   `contact_person` varchar(255) NOT NULL,
@@ -52,3 +53,5 @@ ALTER TABLE `services` ADD FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
 ALTER TABLE `services` ADD FOREIGN KEY (`shortcode_id`) REFERENCES `short_codes` (`id`);
 
 ALTER TABLE `services` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+ALTER TABLE `services` ADD CONSTRAINT `short_code_network_type_key` UNIQUE (`shortcode_id`,`network_type`);

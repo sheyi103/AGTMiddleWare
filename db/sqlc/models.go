@@ -131,6 +131,7 @@ type ShortCode struct {
 type User struct {
 	ID            int32        `json:"id"`
 	Name          string       `json:"name"`
+	Password      string       `json:"password"`
 	Email         string       `json:"email"`
 	PhoneNumber   string       `json:"phone_number"`
 	ContactPerson string       `json:"contact_person"`

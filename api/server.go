@@ -5,7 +5,6 @@ import (
 	db "github.com/sheyi103/agtMiddleware/db/sqlc"
 )
 
-
 // Server serves HTTP requests for our AGT MIDDLEWARE
 type Server struct {
 	store *db.Store
@@ -20,6 +19,9 @@ func NewServer(store *db.Store) *Server {
 	router := gin.Default()
 
 	router.POST("/users", server.createUser)
+	router.GET("/users/:id", server.getUser)
+	router.GET("/users", server.listUser)
+	router.POST("/roles", server.createRole)
 
 	server.router = router
 	return server

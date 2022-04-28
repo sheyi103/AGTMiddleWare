@@ -1,8 +1,8 @@
 -- name: CreateService :execresult
 INSERT INTO services (
-  client_id, client_secret, shortcode_id, user_id, role_id, service_name, service_id, service, service_type, product_id, node_id, subscription_id, subscription_description, base_url, datasync_endpoint, notification_endpoint, network_type
+  client_id, client_secret, shortcode_id, user_id, role_id, service_name, service_id,service_interface, service, service_type, product_id, node_id, subscription_id, subscription_description, base_url, datasync_endpoint, notification_endpoint, network_type
 ) VALUES (
-  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?
+  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?
 );
 
 -- name: GetService :one

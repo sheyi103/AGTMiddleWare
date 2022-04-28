@@ -62,7 +62,7 @@ func (q *Queries) ListShortCodes(ctx context.Context, arg ListShortCodesParams) 
 		return nil, err
 	}
 	defer rows.Close()
-	var items []ShortCode
+	items := []ShortCode{}
 	for rows.Next() {
 		var i ShortCode
 		if err := rows.Scan(&i.ID, &i.ShortCode, &i.CreatedAt); err != nil {
