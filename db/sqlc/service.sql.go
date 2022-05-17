@@ -24,18 +24,18 @@ type CreateServiceParams struct {
 	ShortcodeID             int32                    `json:"shortcode_id"`
 	UserID                  int32                    `json:"user_id"`
 	RoleID                  int32                    `json:"role_id"`
-	ServiceName             sql.NullString           `json:"service_name"`
-	ServiceID               sql.NullString           `json:"service_id"`
+	ServiceName             string                   `json:"service_name"`
+	ServiceID               string                   `json:"service_id"`
 	ServiceInterface        ServicesServiceInterface `json:"service_interface"`
 	Service                 ServicesService          `json:"service"`
 	ServiceType             ServicesServiceType      `json:"service_type"`
-	ProductID               sql.NullString           `json:"product_id"`
-	NodeID                  sql.NullString           `json:"node_id"`
-	SubscriptionID          sql.NullString           `json:"subscription_id"`
-	SubscriptionDescription sql.NullString           `json:"subscription_description"`
-	BaseUrl                 sql.NullString           `json:"base_url"`
-	DatasyncEndpoint        sql.NullString           `json:"datasync_endpoint"`
-	NotificationEndpoint    sql.NullString           `json:"notification_endpoint"`
+	ProductID               string                   `json:"product_id"`
+	NodeID                  string                   `json:"node_id"`
+	SubscriptionID          string                   `json:"subscription_id"`
+	SubscriptionDescription string                   `json:"subscription_description"`
+	BaseUrl                 string                   `json:"base_url"`
+	DatasyncEndpoint        string                   `json:"datasync_endpoint"`
+	NotificationEndpoint    string                   `json:"notification_endpoint"`
 	NetworkType             ServicesNetworkType      `json:"network_type"`
 }
 
@@ -169,11 +169,11 @@ WHERE id = ?
 `
 
 type UpdateServiceParams struct {
-	ServiceName          sql.NullString `json:"service_name"`
-	BaseUrl              sql.NullString `json:"base_url"`
-	DatasyncEndpoint     sql.NullString `json:"datasync_endpoint"`
-	NotificationEndpoint sql.NullString `json:"notification_endpoint"`
-	ID                   int32          `json:"id"`
+	ServiceName          string `json:"service_name"`
+	BaseUrl              string `json:"base_url"`
+	DatasyncEndpoint     string `json:"datasync_endpoint"`
+	NotificationEndpoint string `json:"notification_endpoint"`
+	ID                   int32  `json:"id"`
 }
 
 func (q *Queries) UpdateService(ctx context.Context, arg UpdateServiceParams) (sql.Result, error) {

@@ -8,43 +8,43 @@ import (
 	db "github.com/sheyi103/agtMiddleware/db/sqlc"
 )
 
-type createRoleRequest struct {
-	Name string `json:"name" binding:"required,oneof=ADMINISTRATOR SP AGT"`
+type createShortCodeRequest struct {
+	ShortCode string `json:"shortCode" binding:"required"`
 }
 
-func (server *Server) createRole(ctx *gin.Context) {
-	var req createRoleRequest
+func (server *Server) createShortCode(ctx *gin.Context) {
+	var req createShortCodeRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
-	arg := req.Name
+	arg := req.ShortCode
 
-	_, err := server.store.CreateRole(ctx, arg)
+	_, err := server.store.CreateShortCode(ctx, arg)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, "role created successfully")
+	ctx.JSON(http.StatusOK, "ShortCode created successfully")
 }
 
-type getRoleRequest struct {
+type getShortCodeRequest struct {
 	ID int32 `uri:"id" binding:"required,min=1"`
 }
 
-func (server *Server) getRole(ctx *gin.Context) {
-	var req getRoleRequest
+func (server *Server) getShortCode(ctx *gin.Context) {
+	var req getShortCodeRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
-	role, err := server.store.GetRole(ctx, req.ID)
+	role, err := server.store.GetShortCode(ctx, req.ID)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -59,30 +59,30 @@ func (server *Server) getRole(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, role)
 }
 
-type listRoleRequest struct {
+type listShortCodeRequest struct {
 	PageID   int32 `form:"page_id" binding:"required,min=1"`
 	PageSize int32 `form:"page_size" binding:"required,min=5,max=10"`
 }
 
-func (server *Server) listRole(ctx *gin.Context) {
-	var req listRoleRequest
+func (server *Server) listShortCodes(ctx *gin.Context) {
+	var req listShortCodeRequest
 
 	if err := ctx.ShouldBindQuery(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
-	arg := db.ListRolesParams{
+	arg := db.ListShortCodesParams{
 		Limit:  req.PageSize,
 		Offset: (req.PageID - 1) * req.PageSize,
 	}
 
-	roles, err := server.store.ListRoles(ctx, arg)
+	shortCode, err := server.store.ListShortCodes(ctx, arg)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, roles)
+	ctx.JSON(http.StatusOK, shortCode)
 }

@@ -14,9 +14,9 @@ type createUserRequest struct {
 	Name          string `json:"name" binding:"required"`
 	Password      string `json:"password" binding:"required,min=6"`
 	Email         string `json:"email" binding:"required,email"`
-	PhoneNumber   string `json:"phoneNumber" binding:"required"`
-	ContactPerson string `json:"contactPerson" binding:"required"`
-	RoleID        int32  `json:"roleID" binding:"required"`
+	PhoneNumber   string `json:"phone_number" binding:"required"`
+	ContactPerson string `json:"contact_person" binding:"required"`
+	RoleID        int32  `json:"role_id" binding:"required"`
 }
 
 func (server *Server) createUser(ctx *gin.Context) {

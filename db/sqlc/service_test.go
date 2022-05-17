@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-	"database/sql"
+	"log"
 	"testing"
 
 	"github.com/sheyi103/agtMiddleware/util"
@@ -15,27 +15,28 @@ func createRandomService(t *testing.T) int64 {
 	shortcode_id := int32(createRandomShortCode(t))
 
 	arg := CreateServiceParams{
-		ClientID:                util.RandomString(15),
-		ClientSecret:            util.RandomString(20),
+		ClientID:                util.RandomString(32),
+		ClientSecret:            util.RandomString(16),
 		ShortcodeID:             shortcode_id,
 		UserID:                  user_id,
 		RoleID:                  role_id,
-		ServiceName:             sql.NullString{String: util.RandomString(10), Valid: true},
-		ServiceID:               sql.NullString{String: util.RandomString(10), Valid: true},
+		ServiceName:             util.RandomString(10),
+		ServiceID:               util.RandomString(10),
 		ServiceInterface:        ServicesServiceInterface(util.RandomProtocol()),
 		Service:                 ServicesService(util.RandomService()),
 		ServiceType:             ServicesServiceType(util.RandomServiceType()),
-		ProductID:               sql.NullString{String: util.RandomString(10), Valid: true},
-		NodeID:                  sql.NullString{String: util.RandomString(10), Valid: true},
-		SubscriptionID:          sql.NullString{String: util.RandomString(10), Valid: true},
-		SubscriptionDescription: sql.NullString{String: util.RandomString(10), Valid: true},
-		BaseUrl:                 sql.NullString{String: util.BaseUrl(), Valid: true},
-		DatasyncEndpoint:        sql.NullString{String: util.DataSyncUrl(), Valid: true},
-		NotificationEndpoint:    sql.NullString{String: util.NotificationUrl(), Valid: true},
+		ProductID:                util.RandomString(10),
+		NodeID:                   util.RandomString(10),
+		SubscriptionID:           util.RandomString(10),
+		SubscriptionDescription:  util.RandomString(10),
+		BaseUrl:                  util.BaseUrl(),
+		DatasyncEndpoint:         util.DataSyncUrl(), 
+		NotificationEndpoint:     util.NotificationUrl(),
 		NetworkType:             ServicesNetworkType(util.RandomNetworkType()),
 	}
 
 	service_id, err := testQueries.CreateService(context.Background(), arg)
+	log.Print(err)
 	require.NoError(t, err)
 	rows, err := service_id.RowsAffected()
 	require.NoError(t, err)
