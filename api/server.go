@@ -1,22 +1,44 @@
 package api
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	db "github.com/sheyi103/agtMiddleware/db/sqlc"
+	"github.com/sheyi103/agtMiddleware/token"
+	"github.com/sheyi103/agtMiddleware/util"
 )
 
 // Server serves HTTP requests for our AGT MIDDLEWARE
 type Server struct {
-	store  *db.Store
-	router *gin.Engine
+	config     util.Config
+	store      db.Store
+	tokenMaker token.Maker
+	router     *gin.Engine
 }
 
 // NewServer creates a new HTTP server and setup routing.
-func NewServer(store *db.Store) *Server {
-	server := &Server{store: store}
+func NewServer(config util.Config, store db.Store) (*Server, error) {
+	tokenMaker, err := token.NewJWTMaker(config.TokenSymmetricKey)
+	if err != nil {
+		return nil, fmt.Errorf("cannot create token maker: %w", err)
+	}
+	server := &Server{
+		config:     config,
+		store:      store,
+		tokenMaker: tokenMaker,
+	}
+
+	server.setUpRouter()
+
+	return server, nil
+}
+
+func (server *Server) setUpRouter() {
 	router := gin.Default()
 
 	router.POST("/users", server.createUser)
+	router.POST("/users/login", server.loginUser)
 	router.GET("/users/:id", server.getUser)
 	router.GET("/users", server.listUser)
 
@@ -33,9 +55,7 @@ func NewServer(store *db.Store) *Server {
 	router.GET("/shortcode", server.listShortCodes)
 
 	server.router = router
-	return server
 }
-
 func (server *Server) Start(address string) error {
 	return server.router.Run(address)
 }
