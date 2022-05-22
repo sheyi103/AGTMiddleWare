@@ -14,7 +14,8 @@ type Server struct {
 	config     util.Config
 	store      db.Store
 	tokenMaker token.Maker
-	router     *gin.Engine
+
+	router *gin.Engine
 }
 
 // NewServer creates a new HTTP server and setup routing.
@@ -39,6 +40,8 @@ func (server *Server) setUpRouter() {
 
 	router.POST("/users", server.createUser)
 	router.POST("/users/login", server.loginUser)
+
+	// authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
 	router.GET("/users/:id", server.getUser)
 	router.GET("/users", server.listUser)
 
@@ -53,6 +56,8 @@ func (server *Server) setUpRouter() {
 	router.POST("/shortcode", server.createShortCode)
 	router.GET("/shortcode/:id", server.getShortCode)
 	router.GET("/shortcode", server.listShortCodes)
+
+	router.POST("/messages/sms/outbound", server.sendSMS)
 
 	server.router = router
 }

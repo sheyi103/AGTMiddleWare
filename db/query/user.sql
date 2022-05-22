@@ -1,8 +1,8 @@
 -- name: CreateUser :execresult
 INSERT INTO users (
-  name, email, phone_number,password, contact_person, role_id
+  name, client_id, client_secret, email, phone_number,password, contact_person, role_id
 ) VALUES (
-  ?, ?, ?, ?, ?,?
+  ?, ?, ?, ?, ?,?,?,?
 );
 
 -- name: GetUser :one

@@ -12,14 +12,16 @@ import (
 
 const createUser = `-- name: CreateUser :execresult
 INSERT INTO users (
-  name, email, phone_number,password, contact_person, role_id
+  name, client_id, client_secret, email, phone_number,password, contact_person, role_id
 ) VALUES (
-  ?, ?, ?, ?, ?,?
+  ?, ?, ?, ?, ?,?,?,?
 )
 `
 
 type CreateUserParams struct {
 	Name          string `json:"name"`
+	ClientID      string `json:"client_id"`
+	ClientSecret  string `json:"client_secret"`
 	Email         string `json:"email"`
 	PhoneNumber   string `json:"phone_number"`
 	Password      string `json:"password"`
@@ -30,6 +32,8 @@ type CreateUserParams struct {
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (sql.Result, error) {
 	return q.db.ExecContext(ctx, createUser,
 		arg.Name,
+		arg.ClientID,
+		arg.ClientSecret,
 		arg.Email,
 		arg.PhoneNumber,
 		arg.Password,
@@ -49,7 +53,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id int32) error {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, name, password, email, phone_number, contact_person, role_id, created_at, updated_at FROM users
+SELECT id, name, password, client_id, client_secret, email, phone_number, contact_person, role_id, created_at, updated_at FROM users
 WHERE id = ? LIMIT 1
 `
 
@@ -60,6 +64,8 @@ func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
 		&i.ID,
 		&i.Name,
 		&i.Password,
+		&i.ClientID,
+		&i.ClientSecret,
 		&i.Email,
 		&i.PhoneNumber,
 		&i.ContactPerson,
@@ -71,7 +77,7 @@ func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, name, password, email, phone_number, contact_person, role_id, created_at, updated_at FROM users
+SELECT id, name, password, client_id, client_secret, email, phone_number, contact_person, role_id, created_at, updated_at FROM users
 WHERE email = ? LIMIT 1
 `
 
@@ -82,6 +88,8 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.ID,
 		&i.Name,
 		&i.Password,
+		&i.ClientID,
+		&i.ClientSecret,
 		&i.Email,
 		&i.PhoneNumber,
 		&i.ContactPerson,
@@ -93,7 +101,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 }
 
 const listUsers = `-- name: ListUsers :many
-SELECT id, name, password, email, phone_number, contact_person, role_id, created_at, updated_at FROM users
+SELECT id, name, password, client_id, client_secret, email, phone_number, contact_person, role_id, created_at, updated_at FROM users
 ORDER BY id
 LIMIT ?
 OFFSET ?
@@ -117,6 +125,8 @@ func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, e
 			&i.ID,
 			&i.Name,
 			&i.Password,
+			&i.ClientID,
+			&i.ClientSecret,
 			&i.Email,
 			&i.PhoneNumber,
 			&i.ContactPerson,

@@ -12,18 +12,15 @@ import (
 
 const createService = `-- name: CreateService :execresult
 INSERT INTO services (
-  client_id, client_secret, shortcode_id, user_id, role_id, service_name, service_id,service_interface, service, service_type, product_id, node_id, subscription_id, subscription_description, base_url, datasync_endpoint, notification_endpoint, network_type
+   shortcode_id, user_id, service_name, service_id,service_interface, service, service_type, product_id, node_id, subscription_id, subscription_description, base_url, datasync_endpoint, notification_endpoint, network_type
 ) VALUES (
-  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?
+  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?
 )
 `
 
 type CreateServiceParams struct {
-	ClientID                string                   `json:"client_id"`
-	ClientSecret            string                   `json:"client_secret"`
 	ShortcodeID             int32                    `json:"shortcode_id"`
 	UserID                  int32                    `json:"user_id"`
-	RoleID                  int32                    `json:"role_id"`
 	ServiceName             string                   `json:"service_name"`
 	ServiceID               string                   `json:"service_id"`
 	ServiceInterface        ServicesServiceInterface `json:"service_interface"`
@@ -41,11 +38,8 @@ type CreateServiceParams struct {
 
 func (q *Queries) CreateService(ctx context.Context, arg CreateServiceParams) (sql.Result, error) {
 	return q.db.ExecContext(ctx, createService,
-		arg.ClientID,
-		arg.ClientSecret,
 		arg.ShortcodeID,
 		arg.UserID,
-		arg.RoleID,
 		arg.ServiceName,
 		arg.ServiceID,
 		arg.ServiceInterface,
@@ -73,7 +67,7 @@ func (q *Queries) DeleteService(ctx context.Context, id int32) error {
 }
 
 const getService = `-- name: GetService :one
-SELECT id, client_id, client_secret, shortcode_id, user_id, role_id, service_name, service_id, service_interface, service, service_type, product_id, node_id, subscription_id, subscription_description, base_url, datasync_endpoint, notification_endpoint, network_type, created_at, updated_at FROM services
+SELECT id, shortcode_id, user_id, service_name, service_id, service_interface, service, service_type, product_id, node_id, subscription_id, subscription_description, base_url, datasync_endpoint, notification_endpoint, network_type, created_at, updated_at FROM services
 WHERE id = ? LIMIT 1
 `
 
@@ -82,11 +76,39 @@ func (q *Queries) GetService(ctx context.Context, id int32) (Service, error) {
 	var i Service
 	err := row.Scan(
 		&i.ID,
-		&i.ClientID,
-		&i.ClientSecret,
 		&i.ShortcodeID,
 		&i.UserID,
-		&i.RoleID,
+		&i.ServiceName,
+		&i.ServiceID,
+		&i.ServiceInterface,
+		&i.Service,
+		&i.ServiceType,
+		&i.ProductID,
+		&i.NodeID,
+		&i.SubscriptionID,
+		&i.SubscriptionDescription,
+		&i.BaseUrl,
+		&i.DatasyncEndpoint,
+		&i.NotificationEndpoint,
+		&i.NetworkType,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getServiceByShortcodeId = `-- name: GetServiceByShortcodeId :one
+SELECT id, shortcode_id, user_id, service_name, service_id, service_interface, service, service_type, product_id, node_id, subscription_id, subscription_description, base_url, datasync_endpoint, notification_endpoint, network_type, created_at, updated_at FROM services
+WHERE shortcode_id = ? LIMIT 1
+`
+
+func (q *Queries) GetServiceByShortcodeId(ctx context.Context, shortcodeID int32) (Service, error) {
+	row := q.db.QueryRowContext(ctx, getServiceByShortcodeId, shortcodeID)
+	var i Service
+	err := row.Scan(
+		&i.ID,
+		&i.ShortcodeID,
+		&i.UserID,
 		&i.ServiceName,
 		&i.ServiceID,
 		&i.ServiceInterface,
@@ -107,7 +129,7 @@ func (q *Queries) GetService(ctx context.Context, id int32) (Service, error) {
 }
 
 const listService = `-- name: ListService :many
-SELECT id, client_id, client_secret, shortcode_id, user_id, role_id, service_name, service_id, service_interface, service, service_type, product_id, node_id, subscription_id, subscription_description, base_url, datasync_endpoint, notification_endpoint, network_type, created_at, updated_at FROM services
+SELECT id, shortcode_id, user_id, service_name, service_id, service_interface, service, service_type, product_id, node_id, subscription_id, subscription_description, base_url, datasync_endpoint, notification_endpoint, network_type, created_at, updated_at FROM services
 ORDER BY id
 LIMIT ?
 OFFSET ?
@@ -129,11 +151,8 @@ func (q *Queries) ListService(ctx context.Context, arg ListServiceParams) ([]Ser
 		var i Service
 		if err := rows.Scan(
 			&i.ID,
-			&i.ClientID,
-			&i.ClientSecret,
 			&i.ShortcodeID,
 			&i.UserID,
-			&i.RoleID,
 			&i.ServiceName,
 			&i.ServiceID,
 			&i.ServiceInterface,

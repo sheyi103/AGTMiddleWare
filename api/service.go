@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-sql-driver/mysql"
 	db "github.com/sheyi103/agtMiddleware/db/sqlc"
+	"github.com/sheyi103/agtMiddleware/token"
 )
 
 type ServicesServiceInterface struct {
@@ -48,7 +49,7 @@ func (server *Server) createService(ctx *gin.Context) {
 
 	//check if user exist if true get the client id and secret and add use to create a new service
 	//Else create a new service with random generated string
-
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	arg := db.CreateServiceParams{
 		ClientID:                req.ClientID,
 		ClientSecret:            req.ClientSecret,

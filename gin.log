@@ -1,0 +1,25 @@
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] POST   /users                    --> github.com/sheyi103/agtMiddleware/api.(*Server).createUser-fm (3 handlers)
+[GIN-debug] POST   /users/login              --> github.com/sheyi103/agtMiddleware/api.(*Server).loginUser-fm (3 handlers)
+[GIN-debug] GET    /users/:id                --> github.com/sheyi103/agtMiddleware/api.(*Server).getUser-fm (4 handlers)
+[GIN-debug] GET    /users                    --> github.com/sheyi103/agtMiddleware/api.(*Server).listUser-fm (4 handlers)
+[GIN-debug] POST   /roles                    --> github.com/sheyi103/agtMiddleware/api.(*Server).createRole-fm (4 handlers)
+[GIN-debug] GET    /roles/:id                --> github.com/sheyi103/agtMiddleware/api.(*Server).getRole-fm (4 handlers)
+[GIN-debug] GET    /roles                    --> github.com/sheyi103/agtMiddleware/api.(*Server).listRole-fm (4 handlers)
+[GIN-debug] POST   /services                 --> github.com/sheyi103/agtMiddleware/api.(*Server).createService-fm (4 handlers)
+[GIN-debug] GET    /services/:id             --> github.com/sheyi103/agtMiddleware/api.(*Server).getService-fm (4 handlers)
+[GIN-debug] GET    /services                 --> github.com/sheyi103/agtMiddleware/api.(*Server).listService-fm (4 handlers)
+[GIN-debug] POST   /shortcode                --> github.com/sheyi103/agtMiddleware/api.(*Server).createShortCode-fm (4 handlers)
+[GIN-debug] GET    /shortcode/:id            --> github.com/sheyi103/agtMiddleware/api.(*Server).getShortCode-fm (4 handlers)
+[GIN-debug] GET    /shortcode                --> github.com/sheyi103/agtMiddleware/api.(*Server).listShortCodes-fm (4 handlers)
+[GIN-debug] POST   /messages/sms/outbound    --> github.com/sheyi103/agtMiddleware/api.(*Server).sendSMS-fm (4 handlers)
+[GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
+Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
+[GIN-debug] Listening and serving HTTP on 0.0.0.0:8080
+[GIN] 2022/05/20 - 15:16:02 | 200 |    108.6508ms |             ::1 | POST     "/users/login"
+[GIN] 2022/05/20 - 15:16:27 | 401 |            0s |             ::1 | GET      "/users/1"

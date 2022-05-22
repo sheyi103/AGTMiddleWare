@@ -10,16 +10,13 @@ import (
 )
 
 func createRandomService(t *testing.T) int64 {
-	role_id := int32(createRandomRole(t))
+	
 	user_id := int32(createRandomUser(t))
 	shortcode_id := int32(createRandomShortCode(t))
 
 	arg := CreateServiceParams{
-		ClientID:                util.RandomString(32),
-		ClientSecret:            util.RandomString(16),
 		ShortcodeID:             shortcode_id,
 		UserID:                  user_id,
-		RoleID:                  role_id,
 		ServiceName:             util.RandomString(10),
 		ServiceID:               util.RandomString(10),
 		ServiceInterface:        ServicesServiceInterface(util.RandomProtocol()),

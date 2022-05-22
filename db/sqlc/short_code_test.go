@@ -10,10 +10,13 @@ import (
 )
 
 func createRandomShortCode(t *testing.T) int64 {
-	code := int(util.RandomInt(3, 1000))
-	shortcode := strconv.Itoa(code)
+	user_id := int32(createRandomUser(t))
+	arg := CreateShortCodeParams{
+		ShortCode: strconv.Itoa(int(util.RandomInt(3, 1000))),
+		UserID:    user_id,
+	}
 
-	shortCode, err := testQueries.CreateShortCode(context.Background(), shortcode)
+	shortCode, err := testQueries.CreateShortCode(context.Background(), arg)
 	require.NoError(t, err)
 	shortCodes, err := shortCode.RowsAffected()
 	require.NoError(t, err)

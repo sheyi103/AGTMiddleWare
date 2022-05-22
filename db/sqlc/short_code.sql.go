@@ -12,14 +12,19 @@ import (
 
 const createShortCode = `-- name: CreateShortCode :execresult
 INSERT INTO short_codes (
-  short_code
+  short_code, user_id
 ) VALUES (
-  ?
+  ?,?
 )
 `
 
-func (q *Queries) CreateShortCode(ctx context.Context, shortCode string) (sql.Result, error) {
-	return q.db.ExecContext(ctx, createShortCode, shortCode)
+type CreateShortCodeParams struct {
+	ShortCode string `json:"short_code"`
+	UserID    int32  `json:"user_id"`
+}
+
+func (q *Queries) CreateShortCode(ctx context.Context, arg CreateShortCodeParams) (sql.Result, error) {
+	return q.db.ExecContext(ctx, createShortCode, arg.ShortCode, arg.UserID)
 }
 
 const deleteShortCode = `-- name: DeleteShortCode :exec
@@ -33,19 +38,40 @@ func (q *Queries) DeleteShortCode(ctx context.Context, id int32) error {
 }
 
 const getShortCode = `-- name: GetShortCode :one
-SELECT id, short_code, created_at FROM short_codes
+SELECT id, short_code, user_id, created_at FROM short_codes
 WHERE id = ? LIMIT 1
 `
 
 func (q *Queries) GetShortCode(ctx context.Context, id int32) (ShortCode, error) {
 	row := q.db.QueryRowContext(ctx, getShortCode, id)
 	var i ShortCode
-	err := row.Scan(&i.ID, &i.ShortCode, &i.CreatedAt)
+	err := row.Scan(
+		&i.ID,
+		&i.ShortCode,
+		&i.UserID,
+		&i.CreatedAt,
+	)
 	return i, err
 }
 
+const getShortcodeByShortCode = `-- name: GetShortcodeByShortCode :one
+
+SELECT id FROM short_codes
+WHERE short_code = ? LIMIT 1
+`
+
+// --name: GetByShortcode :one
+// SELECT id, short_code FROM short_codes
+// WHERE short_code = ? LIMIT 1;
+func (q *Queries) GetShortcodeByShortCode(ctx context.Context, shortCode string) (int32, error) {
+	row := q.db.QueryRowContext(ctx, getShortcodeByShortCode, shortCode)
+	var id int32
+	err := row.Scan(&id)
+	return id, err
+}
+
 const listShortCodes = `-- name: ListShortCodes :many
-SELECT id, short_code, created_at FROM short_codes
+SELECT id, short_code, user_id, created_at FROM short_codes
 ORDER BY id
 LIMIT ?
 OFFSET ?
@@ -65,7 +91,12 @@ func (q *Queries) ListShortCodes(ctx context.Context, arg ListShortCodesParams) 
 	items := []ShortCode{}
 	for rows.Next() {
 		var i ShortCode
-		if err := rows.Scan(&i.ID, &i.ShortCode, &i.CreatedAt); err != nil {
+		if err := rows.Scan(
+			&i.ID,
+			&i.ShortCode,
+			&i.UserID,
+			&i.CreatedAt,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

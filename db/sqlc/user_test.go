@@ -15,6 +15,8 @@ func createRandomUser(t *testing.T) int64 {
 	arg := CreateUserParams{
 		Name:          util.RandomString(11),
 		Email:         util.RandomEmail(),
+		ClientID:      util.RandomString(32),
+		ClientSecret:  util.RandomString(16),
 		PhoneNumber:   util.RandomPhoneNumber(),
 		Password:      hashedPassword,
 		ContactPerson: util.RandomString(11),

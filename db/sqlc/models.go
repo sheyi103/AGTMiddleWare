@@ -76,6 +76,7 @@ type ServicesServiceType string
 const (
 	ServicesServiceTypeDAILY    ServicesServiceType = "DAILY"
 	ServicesServiceTypeWEEKLY   ServicesServiceType = "WEEKLY"
+	ServicesServiceTypeBIWEEKLY ServicesServiceType = "BI-WEEKLY"
 	ServicesServiceTypeMONTHLY  ServicesServiceType = "MONTHLY"
 	ServicesServiceTypeONDEMAND ServicesServiceType = "ON-DEMAND"
 )
@@ -92,6 +93,67 @@ func (e *ServicesServiceType) Scan(src interface{}) error {
 	return nil
 }
 
+type TransactionsDatasyncStatusCode string
+
+const (
+	TransactionsDatasyncStatusCodePENDING TransactionsDatasyncStatusCode = "PENDING"
+	TransactionsDatasyncStatusCodeSENT    TransactionsDatasyncStatusCode = "SENT"
+	TransactionsDatasyncStatusCodeFAILED  TransactionsDatasyncStatusCode = "FAILED"
+)
+
+func (e *TransactionsDatasyncStatusCode) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = TransactionsDatasyncStatusCode(s)
+	case string:
+		*e = TransactionsDatasyncStatusCode(s)
+	default:
+		return fmt.Errorf("unsupported scan type for TransactionsDatasyncStatusCode: %T", src)
+	}
+	return nil
+}
+
+type TransactionsGateway string
+
+const (
+	TransactionsGatewaySMS  TransactionsGateway = "SMS"
+	TransactionsGatewayUSSD TransactionsGateway = "USSD"
+	TransactionsGatewayWEB  TransactionsGateway = "WEB"
+)
+
+func (e *TransactionsGateway) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = TransactionsGateway(s)
+	case string:
+		*e = TransactionsGateway(s)
+	default:
+		return fmt.Errorf("unsupported scan type for TransactionsGateway: %T", src)
+	}
+	return nil
+}
+
+type TransactionsNetworkType string
+
+const (
+	TransactionsNetworkTypeMTN     TransactionsNetworkType = "MTN"
+	TransactionsNetworkTypeAIRTEL  TransactionsNetworkType = "AIRTEL"
+	TransactionsNetworkTypeGLO     TransactionsNetworkType = "GLO"
+	TransactionsNetworkType9MOBILE TransactionsNetworkType = "9MOBILE"
+)
+
+func (e *TransactionsNetworkType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = TransactionsNetworkType(s)
+	case string:
+		*e = TransactionsNetworkType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for TransactionsNetworkType: %T", src)
+	}
+	return nil
+}
+
 type Role struct {
 	ID        int32        `json:"id"`
 	Name      string       `json:"name"`
@@ -100,11 +162,8 @@ type Role struct {
 
 type Service struct {
 	ID                      int32                    `json:"id"`
-	ClientID                string                   `json:"client_id"`
-	ClientSecret            string                   `json:"client_secret"`
 	ShortcodeID             int32                    `json:"shortcode_id"`
 	UserID                  int32                    `json:"user_id"`
-	RoleID                  int32                    `json:"role_id"`
 	ServiceName             string                   `json:"service_name"`
 	ServiceID               string                   `json:"service_id"`
 	ServiceInterface        ServicesServiceInterface `json:"service_interface"`
@@ -125,13 +184,38 @@ type Service struct {
 type ShortCode struct {
 	ID        int32        `json:"id"`
 	ShortCode string       `json:"short_code"`
+	UserID    int32        `json:"user_id"`
 	CreatedAt sql.NullTime `json:"created_at"`
+}
+
+type Transaction struct {
+	ID                      int32                          `json:"id"`
+	UserID                  int32                          `json:"user_id"`
+	Shortcode               int32                          `json:"shortcode"`
+	Msisdn                  string                         `json:"msisdn"`
+	Gateway                 TransactionsGateway            `json:"gateway"`
+	TransactionID           string                         `json:"transaction_id"`
+	SubscriptionID          string                         `json:"subscription_id"`
+	SubscriptionDescription string                         `json:"subscription_description"`
+	ChargeAmount            string                         `json:"charge_amount"`
+	StatusCode              string                         `json:"status_code"`
+	ChargingMode            string                         `json:"charging_mode"`
+	ValidityType            string                         `json:"validity_type"`
+	OperationID             string                         `json:"operation_id"`
+	ValidityDays            string                         `json:"validity_days"`
+	StatusMessage           string                         `json:"status_message"`
+	DatasyncStatusCode      TransactionsDatasyncStatusCode `json:"datasync_status_code"`
+	NetworkType             TransactionsNetworkType        `json:"network_type"`
+	CreatedAt               sql.NullTime                   `json:"created_at"`
+	UpdatedAt               sql.NullTime                   `json:"updated_at"`
 }
 
 type User struct {
 	ID            int32        `json:"id"`
 	Name          string       `json:"name"`
 	Password      string       `json:"password"`
+	ClientID      string       `json:"client_id"`
+	ClientSecret  string       `json:"client_secret"`
 	Email         string       `json:"email"`
 	PhoneNumber   string       `json:"phone_number"`
 	ContactPerson string       `json:"contact_person"`
