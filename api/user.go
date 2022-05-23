@@ -20,9 +20,10 @@ type createUserRequest struct {
 }
 
 type userResponse struct {
-	Id            int32  `json:"id"`
 	Name          string `json:"name"`
 	Password      string `json:"password"`
+	ClientID      string `json:"client_id"`
+	ClientSecret  string `json:"client_secret"`
 	Email         string `json:"email"`
 	PhoneNumber   string `json:"phone_number"`
 	ContactPerson string `json:"contact_person"`
@@ -31,9 +32,10 @@ type userResponse struct {
 
 func newUserResponse(user db.User) userResponse {
 	return userResponse{
-		Id:            user.ID,
 		Name:          user.Name,
 		Password:      user.Password,
+		ClientID:      user.ClientID,
+		ClientSecret:  user.ClientSecret,
 		Email:         user.Email,
 		PhoneNumber:   user.PhoneNumber,
 		ContactPerson: user.ContactPerson,
@@ -60,6 +62,8 @@ func (server *Server) createUser(ctx *gin.Context) {
 	arg := db.CreateUserParams{
 		Name:          req.Name,
 		Password:      hashedPassword,
+		ClientID:      util.RandomString(32),
+		ClientSecret:  util.RandomString(16),
 		Email:         req.Email,
 		PhoneNumber:   req.PhoneNumber,
 		ContactPerson: req.ContactPerson,
@@ -88,13 +92,18 @@ func (server *Server) createUser(ctx *gin.Context) {
 }
 
 type loginUserRequest struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required,min=6"`
+	ClientID     string `json:"client_id" binding:"required,alphanum"`
+	ClientSecret string `json:"client_secret" binding:"required,alphanum"`
 }
 
 type loginUserResponse struct {
 	AccessToken string       `json:"access_token"`
 	User        userResponse `json:"user"`
+}
+
+type loginUser struct {
+	ClientID     string `json:"client_id"`
+	ClientSecret string `json:"client_secret"`
 }
 
 func (server *Server) loginUser(ctx *gin.Context) {
@@ -105,7 +114,13 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		return
 	}
 
-	user, err := server.store.GetUserByEmail(ctx, req.Email)
+	arg := db.GetUserByClientIdParams{
+
+		ClientID:     req.ClientID,
+		ClientSecret: req.ClientSecret,
+	}
+
+	user, err := server.store.GetUserByClientId(ctx, arg)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -116,11 +131,6 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		return
 	}
 
-	err = util.CheckPassword(req.Password, user.Password)
-	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
-		return
-	}
 	accessToken, err := server.tokenMaker.CreateToken(
 		user.Email,
 		server.config.AccessTokenDuration,

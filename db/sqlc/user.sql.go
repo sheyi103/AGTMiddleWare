@@ -76,13 +76,18 @@ func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
 	return i, err
 }
 
-const getUserByEmail = `-- name: GetUserByEmail :one
+const getUserByClientId = `-- name: GetUserByClientId :one
 SELECT id, name, password, client_id, client_secret, email, phone_number, contact_person, role_id, created_at, updated_at FROM users
-WHERE email = ? LIMIT 1
+WHERE client_id = ? && client_secret = ? LIMIT 1
 `
 
-func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
-	row := q.db.QueryRowContext(ctx, getUserByEmail, email)
+type GetUserByClientIdParams struct {
+	ClientID     string `json:"client_id"`
+	ClientSecret string `json:"client_secret"`
+}
+
+func (q *Queries) GetUserByClientId(ctx context.Context, arg GetUserByClientIdParams) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByClientId, arg.ClientID, arg.ClientSecret)
 	var i User
 	err := row.Scan(
 		&i.ID,

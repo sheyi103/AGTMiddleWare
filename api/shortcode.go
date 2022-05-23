@@ -9,7 +9,8 @@ import (
 )
 
 type createShortCodeRequest struct {
-	ShortCode string `json:"shortCode" binding:"required"`
+	ShortCode string `json:"short_code" binding:"required"`
+	UserID    int32  `json:"user_id" binding:"required"`
 }
 
 func (server *Server) createShortCode(ctx *gin.Context) {
@@ -20,7 +21,10 @@ func (server *Server) createShortCode(ctx *gin.Context) {
 		return
 	}
 
-	arg := req.ShortCode
+	arg := db.CreateShortCodeParams{
+		ShortCode: req.ShortCode,
+		UserID:    req.UserID,
+	}
 
 	_, err := server.store.CreateShortCode(ctx, arg)
 
