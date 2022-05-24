@@ -6,9 +6,9 @@
 
 [GIN-debug] POST   /users                    --> github.com/sheyi103/agtMiddleware/api.(*Server).createUser-fm (3 handlers)
 [GIN-debug] POST   /users/login              --> github.com/sheyi103/agtMiddleware/api.(*Server).loginUser-fm (3 handlers)
-[GIN-debug] GET    /users/:id                --> github.com/sheyi103/agtMiddleware/api.(*Server).getUser-fm (4 handlers)
+[GIN-debug] POST   /roles                    --> github.com/sheyi103/agtMiddleware/api.(*Server).createRole-fm (3 handlers)
+[GIN-debug] GET    /users/:id                --> github.com/sheyi103/agtMiddleware/api.(*Server).getUser-fm (3 handlers)
 [GIN-debug] GET    /users                    --> github.com/sheyi103/agtMiddleware/api.(*Server).listUser-fm (4 handlers)
-[GIN-debug] POST   /roles                    --> github.com/sheyi103/agtMiddleware/api.(*Server).createRole-fm (4 handlers)
 [GIN-debug] GET    /roles/:id                --> github.com/sheyi103/agtMiddleware/api.(*Server).getRole-fm (4 handlers)
 [GIN-debug] GET    /roles                    --> github.com/sheyi103/agtMiddleware/api.(*Server).listRole-fm (4 handlers)
 [GIN-debug] POST   /services                 --> github.com/sheyi103/agtMiddleware/api.(*Server).createService-fm (4 handlers)
@@ -21,10 +21,7 @@
 [GIN-debug] POST   /messages/ussd/outbound   --> github.com/sheyi103/agtMiddleware/api.(*Server).sendUSSD-fm (4 handlers)
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
-[GIN-debug] Listening and serving HTTP on 0.0.0.0:8080
-[GIN] 2022/05/23 - 17:12:19 | 200 |    1.1024129s |             ::1 | POST     "/messages/ussd/outbound"
-[GIN] 2022/05/23 - 17:13:00 | 200 |    307.0525ms |             ::1 | POST     "/messages/ussd/outbound"
-[GIN] 2022/05/23 - 17:40:05 | 401 |      1.9024ms |             ::1 | POST     "/messages/ussd/outbound"
-[GIN] 2022/05/23 - 17:41:21 | 200 |     71.7196ms |             ::1 | POST     "/users/login"
-[GIN] 2022/05/23 - 17:41:50 | 200 |      6.4527ms |             ::1 | POST     "/users/login"
-[GIN] 2022/05/23 - 17:42:44 | 200 |    1.2650267s |             ::1 | POST     "/messages/ussd/outbound"
+[GIN-debug] Listening and serving HTTP on 0.0.0.0:8081
+[GIN] 2022/05/24 - 14:55:24 | 200 |    4.816618ms |   41.76.196.214 | GET      "/users/1"
+[GIN] 2022/05/24 - 14:56:08 | 200 |    4.159411ms |   41.76.196.214 | POST     "/users/login"
+[GIN] 2022/05/24 - 15:07:15 | 404 |       1.299µs |   185.173.35.41 | GET      "/"

@@ -40,12 +40,13 @@ func (server *Server) setUpRouter() {
 
 	router.POST("/users", server.createUser)
 	router.POST("/users/login", server.loginUser)
-
+	router.POST("/roles", server.createRole)
+	router.GET("/users/:id", server.getUser)
 	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
-	authRoutes.GET("/users/:id", server.getUser)
+	//authRoutes.GET("/users/:id", server.getUser)
 	authRoutes.GET("/users", server.listUser)
 
-	authRoutes.POST("/roles", server.createRole)
+	//authRoutes.POST("/roles", server.createRole)
 	authRoutes.GET("/roles/:id", server.getRole)
 	authRoutes.GET("/roles", server.listRole)
 
