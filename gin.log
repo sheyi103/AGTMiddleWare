@@ -6,31 +6,25 @@
 
 [GIN-debug] POST   /users                    --> github.com/sheyi103/agtMiddleware/api.(*Server).createUser-fm (3 handlers)
 [GIN-debug] POST   /users/login              --> github.com/sheyi103/agtMiddleware/api.(*Server).loginUser-fm (3 handlers)
-[GIN-debug] GET    /users/:id                --> github.com/sheyi103/agtMiddleware/api.(*Server).getUser-fm (3 handlers)
-[GIN-debug] GET    /users                    --> github.com/sheyi103/agtMiddleware/api.(*Server).listUser-fm (3 handlers)
-[GIN-debug] POST   /roles                    --> github.com/sheyi103/agtMiddleware/api.(*Server).createRole-fm (3 handlers)
-[GIN-debug] GET    /roles/:id                --> github.com/sheyi103/agtMiddleware/api.(*Server).getRole-fm (3 handlers)
-[GIN-debug] GET    /roles                    --> github.com/sheyi103/agtMiddleware/api.(*Server).listRole-fm (3 handlers)
-[GIN-debug] POST   /services                 --> github.com/sheyi103/agtMiddleware/api.(*Server).createService-fm (3 handlers)
-[GIN-debug] GET    /services/:id             --> github.com/sheyi103/agtMiddleware/api.(*Server).getService-fm (3 handlers)
-[GIN-debug] GET    /services                 --> github.com/sheyi103/agtMiddleware/api.(*Server).listService-fm (3 handlers)
-[GIN-debug] POST   /shortcode                --> github.com/sheyi103/agtMiddleware/api.(*Server).createShortCode-fm (3 handlers)
-[GIN-debug] GET    /shortcode/:id            --> github.com/sheyi103/agtMiddleware/api.(*Server).getShortCode-fm (3 handlers)
-[GIN-debug] GET    /shortcode                --> github.com/sheyi103/agtMiddleware/api.(*Server).listShortCodes-fm (3 handlers)
-[GIN-debug] POST   /messages/sms/outbound    --> github.com/sheyi103/agtMiddleware/api.(*Server).sendSMS-fm (3 handlers)
+[GIN-debug] GET    /users/:id                --> github.com/sheyi103/agtMiddleware/api.(*Server).getUser-fm (4 handlers)
+[GIN-debug] GET    /users                    --> github.com/sheyi103/agtMiddleware/api.(*Server).listUser-fm (4 handlers)
+[GIN-debug] POST   /roles                    --> github.com/sheyi103/agtMiddleware/api.(*Server).createRole-fm (4 handlers)
+[GIN-debug] GET    /roles/:id                --> github.com/sheyi103/agtMiddleware/api.(*Server).getRole-fm (4 handlers)
+[GIN-debug] GET    /roles                    --> github.com/sheyi103/agtMiddleware/api.(*Server).listRole-fm (4 handlers)
+[GIN-debug] POST   /services                 --> github.com/sheyi103/agtMiddleware/api.(*Server).createService-fm (4 handlers)
+[GIN-debug] GET    /services/:id             --> github.com/sheyi103/agtMiddleware/api.(*Server).getService-fm (4 handlers)
+[GIN-debug] GET    /services                 --> github.com/sheyi103/agtMiddleware/api.(*Server).listService-fm (4 handlers)
+[GIN-debug] POST   /shortcode                --> github.com/sheyi103/agtMiddleware/api.(*Server).createShortCode-fm (4 handlers)
+[GIN-debug] GET    /shortcode/:id            --> github.com/sheyi103/agtMiddleware/api.(*Server).getShortCode-fm (4 handlers)
+[GIN-debug] GET    /shortcode                --> github.com/sheyi103/agtMiddleware/api.(*Server).listShortCodes-fm (4 handlers)
+[GIN-debug] POST   /messages/sms/outbound    --> github.com/sheyi103/agtMiddleware/api.(*Server).sendSMS-fm (4 handlers)
+[GIN-debug] POST   /messages/ussd/outbound   --> github.com/sheyi103/agtMiddleware/api.(*Server).sendUSSD-fm (4 handlers)
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on 0.0.0.0:8080
-[GIN] 2022/05/23 - 11:04:49 | 200 |     23.8778ms |             ::1 | POST     "/roles"
-[GIN] 2022/05/23 - 11:04:54 | 200 |     11.5109ms |             ::1 | POST     "/roles"
-[GIN] 2022/05/23 - 11:05:04 | 200 |     12.1405ms |             ::1 | POST     "/roles"
-[GIN] 2022/05/23 - 11:05:09 | 200 |      7.9012ms |             ::1 | GET      "/roles?page_id=1&page_size=5"
-[GIN] 2022/05/23 - 11:05:19 | 200 |      4.4877ms |             ::1 | GET      "/roles/2"
-[GIN] 2022/05/23 - 11:07:03 | 200 |     87.8373ms |             ::1 | POST     "/users"
-[GIN] 2022/05/23 - 11:07:12 | 200 |       4.456ms |             ::1 | GET      "/users/1"
-[GIN] 2022/05/23 - 11:08:08 | 200 |      15.382ms |             ::1 | POST     "/shortcode"
-[GIN] 2022/05/23 - 11:08:17 | 200 |      4.4038ms |             ::1 | GET      "/shortcode?page_id=1&page_size=5"
-[GIN] 2022/05/23 - 11:08:54 | 200 |     13.7197ms |             ::1 | POST     "/services"
-[GIN] 2022/05/23 - 11:08:58 | 200 |      3.5656ms |             ::1 | GET      "/services?page_id=1&page_size=5"
-[GIN] 2022/05/23 - 11:09:54 | 200 |      8.0842ms |             ::1 | POST     "/users/login"
-[GIN] 2022/05/23 - 11:17:53 | 200 |    1.2235024s |             ::1 | POST     "/messages/sms/outbound"
+[GIN] 2022/05/23 - 17:12:19 | 200 |    1.1024129s |             ::1 | POST     "/messages/ussd/outbound"
+[GIN] 2022/05/23 - 17:13:00 | 200 |    307.0525ms |             ::1 | POST     "/messages/ussd/outbound"
+[GIN] 2022/05/23 - 17:40:05 | 401 |      1.9024ms |             ::1 | POST     "/messages/ussd/outbound"
+[GIN] 2022/05/23 - 17:41:21 | 200 |     71.7196ms |             ::1 | POST     "/users/login"
+[GIN] 2022/05/23 - 17:41:50 | 200 |      6.4527ms |             ::1 | POST     "/users/login"
+[GIN] 2022/05/23 - 17:42:44 | 200 |    1.2650267s |             ::1 | POST     "/messages/ussd/outbound"

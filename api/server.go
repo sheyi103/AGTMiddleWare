@@ -41,23 +41,24 @@ func (server *Server) setUpRouter() {
 	router.POST("/users", server.createUser)
 	router.POST("/users/login", server.loginUser)
 
-	// authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
-	router.GET("/users/:id", server.getUser)
-	router.GET("/users", server.listUser)
+	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
+	authRoutes.GET("/users/:id", server.getUser)
+	authRoutes.GET("/users", server.listUser)
 
-	router.POST("/roles", server.createRole)
-	router.GET("/roles/:id", server.getRole)
-	router.GET("/roles", server.listRole)
+	authRoutes.POST("/roles", server.createRole)
+	authRoutes.GET("/roles/:id", server.getRole)
+	authRoutes.GET("/roles", server.listRole)
 
-	router.POST("/services", server.createService)
-	router.GET("/services/:id", server.getService)
-	router.GET("/services", server.listService)
+	authRoutes.POST("/services", server.createService)
+	authRoutes.GET("/services/:id", server.getService)
+	authRoutes.GET("/services", server.listService)
 
-	router.POST("/shortcode", server.createShortCode)
-	router.GET("/shortcode/:id", server.getShortCode)
-	router.GET("/shortcode", server.listShortCodes)
+	authRoutes.POST("/shortcode", server.createShortCode)
+	authRoutes.GET("/shortcode/:id", server.getShortCode)
+	authRoutes.GET("/shortcode", server.listShortCodes)
 
-	router.POST("/messages/sms/outbound", server.sendSMS)
+	authRoutes.POST("/messages/sms/outbound", server.sendSMS)
+	authRoutes.POST("/messages/ussd/outbound", server.sendUSSD)
 
 	server.router = router
 }

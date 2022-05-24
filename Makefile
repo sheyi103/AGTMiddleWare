@@ -1,5 +1,7 @@
 mysql:
 	docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=secret -d mysql:latest 
+pullmysql:
+	docker pull mysql:latest
 
 createdb:
 	docker exec -it mysql mysql -uroot -psecret -e "create database agt_middleware_db;"
