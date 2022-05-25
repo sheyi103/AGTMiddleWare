@@ -15,6 +15,13 @@ type sendUSSDRequest struct {
 	UssdString  string `json:"ussd_string" binding:"required`
 }
 
+type ussdNotifyRequest struct {
+	SenderAddress   string `json:"senderAddress" binding:"required"`
+	ReceiverAddress string `json:"receiverAddress" binding:"required"`
+	Message         string `json:"message" binding:"required"`
+	Created         int64  `json:"created" binding:"required"`
+}
+
 type ussdSubscriptionRequest struct {
 	SenderAddress string `json:"sender_address" binding:"required"`
 	NotifyUrl     string `json:"notify_url" binding:"required"`
@@ -116,5 +123,25 @@ func (server *Server) ussdDeleteSubscription(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, ussdDeleteSubscription)
+
+}
+
+func (server *Server) USSDNotifyUrl(ctx *gin.Context) {
+	var req smsNotifyRequest
+
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	//call sms subscription service
+	// smsSubscription, err := madapi.SMSSubscription(accessToken, req.SenderAddress, req.NotifyUrl, req.TargetSystem)
+	// if err != nil {
+
+	// 	ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+	// 	return
+	// }
+
+	ctx.JSON(http.StatusOK, req)
 
 }
