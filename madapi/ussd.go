@@ -28,7 +28,7 @@ type USSDSubscriptionResponse struct {
 	StatusMessage string `json:"statusMessage"`
 	TransactionId string `json:"transactionId"`
 	Data          struct {
-		SubscriptionId string `json:"subscriptionId"`
+		Id string `json:"subscriptionId"`
 	} `json:"data"`
 }
 
