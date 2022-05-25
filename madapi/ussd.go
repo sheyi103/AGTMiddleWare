@@ -128,6 +128,7 @@ func USSDDeleteSubscription(accessToken string, subscriptionId string) (USSDDele
 
 	var bearer = "Bearer " + accessToken
 	url := "https://preprod.api.mtn.com/v1/messages/ussd/outbound/subscription/" + subscriptionId
+	log.Println(url)
 
 	request, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
