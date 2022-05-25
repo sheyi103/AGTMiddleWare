@@ -68,14 +68,12 @@ func JSONLogMiddleware() gin.HandlerFunc {
 		duration := util.GetDurationInMillseconds(start)
 
 		entry := log.WithFields(log.Fields{
-			"client_ip":  util.GetClientIP(c),
-			"duration":   duration,
-			"method":     c.Request.Method,
-			"path":       c.Request.RequestURI,
-			"status":     c.Writer.Status(),
-			"payload":    c.Request,
-			"referrer":   c.Request.Referer(),
-			"request_id": c.Writer.Header().Get("Request-Id"),
+			"client_ip": util.GetClientIP(c),
+			"duration":  duration,
+			"method":    c.Request.Method,
+			"path":      c.Request.RequestURI,
+			"status":    c.Writer.Status(),
+			"payload":   c,
 			// "api_version": util.ApiVersion,
 		})
 
