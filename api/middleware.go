@@ -1,15 +1,14 @@
 package api
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sheyi103/agtMiddleware/token"
-	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -53,24 +52,24 @@ func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 
 	}
 }
+type bodyLogWriter struct {
+    gin.ResponseWriter
+    body *bytes.Buffer
+}
 
-func Logger() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		t := time.Now()
+func (w bodyLogWriter) Write(b []byte) (int, error) {
+    w.body.Write(b)
+    return w.ResponseWriter.Write(b)
+}
 
-		// Set example variable
-		c.Set("data", "12345")
-
-		// before request
-
-		c.Next()
-
-		// after request
-		latency := time.Since(t)
-		log.Print(latency)
-
-		// access the status we are sending
-		status := c.Writer.Status()
-		log.Println(status)
-	}
+func ginBodyLogMiddleware(c *gin.Context) {
+    blw := &bodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
+    c.Writer = blw
+    c.Next()
+    statusCode := c.Writer.Status()
+    if statusCode >= 400 {
+        //ok this is an request with error, let's make a record for it
+        // now print body (or log in your preferred way)
+        fmt.Println("Response body: " + blw.body.String())
+    }
 }

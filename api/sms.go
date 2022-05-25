@@ -1,8 +1,10 @@
 package api
 
 import (
+	"io"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sheyi103/agtMiddleware/madapi"
@@ -131,12 +133,16 @@ func (server *Server) smsDeleteSubscription(ctx *gin.Context) {
 }
 
 func (server *Server) SMSNotifyUrl(ctx *gin.Context) {
+		f, _ := os.Create("gin.log")
+    gin.DefaultWriter = io.MultiWriter(f)
+	
 	var req smsNotifyRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
+		
 
 	log.Printf("SenderAddress: %s , Receiver Address: %s, Message: %s, Created: %d", req.SenderAddress, req.ReceiverAddress, req.Message, req.Created)
 
