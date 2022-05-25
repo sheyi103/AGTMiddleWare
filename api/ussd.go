@@ -29,7 +29,6 @@ type ussdSubscriptionRequest struct {
 }
 
 type ussdDeleteSubscriptionRequest struct {
-	SenderAddress  string `json:"sender_address" binding:"required"`
 	SubscriptionId string `json:"subscriptionId" binding:"required"`
 }
 
@@ -96,7 +95,7 @@ func (server *Server) ussdSubscription(ctx *gin.Context) {
 }
 
 func (server *Server) ussdDeleteSubscription(ctx *gin.Context) {
-	var req smsDeleteSubscriptionRequest
+	var req ussdDeleteSubscriptionRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
