@@ -14,7 +14,8 @@ import (
 )
 
 func main() {
-
+	f, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(f)
 	config, err := util.LoadConfig(".")
 
 	if err != nil {
