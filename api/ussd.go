@@ -127,7 +127,7 @@ func (server *Server) ussdDeleteSubscription(ctx *gin.Context) {
 }
 
 func (server *Server) USSDNotifyUrl(ctx *gin.Context) {
-	var req smsNotifyRequest
+	var req sendUSSDRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
