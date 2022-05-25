@@ -9,7 +9,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sheyi103/agtMiddleware/token"
-	"github.com/sheyi103/agtMiddleware/util"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -55,32 +54,23 @@ func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 	}
 }
 
-// JSONLogMiddleware logs a gin HTTP request in JSON format, with some additional custom key/values
-func JSONLogMiddleware() gin.HandlerFunc {
+func Logger() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Start timer
-		start := time.Now()
+		t := time.Now()
 
-		// Process Request
+		// Set example variable
+		c.Set("data", "12345")
+
+		// before request
+
 		c.Next()
 
-		// Stop timer
-		duration := util.GetDurationInMillseconds(start)
+		// after request
+		latency := time.Since(t)
+		log.Print(latency)
 
-		entry := log.WithFields(log.Fields{
-			"client_ip": util.GetClientIP(c),
-			"duration":  duration,
-			"method":    c.Request.Method,
-			"path":      c.Request.RequestURI,
-			"status":    c.Writer.Status(),
-			// "payload":   ioutil.ReadAll),
-			// "api_version": util.ApiVersion,
-		})
-
-		if c.Writer.Status() >= 500 {
-			entry.Error(c.Errors.String())
-		} else {
-			entry.Info("")
-		}
+		// access the status we are sending
+		status := c.Writer.Status()
+		log.Println(status)
 	}
 }

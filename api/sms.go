@@ -138,7 +138,7 @@ func (server *Server) SMSNotifyUrl(ctx *gin.Context) {
 		return
 	}
 
-	log.Println(&req)
+	log.Println(req)
 
 	//call sms subscription service
 	// smsSubscription, err := madapi.SMSSubscription(accessToken, req.SenderAddress, req.NotifyUrl, req.TargetSystem)
