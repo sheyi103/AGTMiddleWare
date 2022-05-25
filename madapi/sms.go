@@ -122,7 +122,7 @@ func SMSSubscription(accessToken string, senderAddress string, notifyUrl string,
 func SMSDeleteSubscription(accessToken string, senderAddress string, subscriptionId string) (SMSDeleteSubscriptionResponse, error) {
 
 	var bearer = "Bearer " + accessToken
-	url := "https://preprod.api.mtn.com/v2/messages/sms/outbound/" + senderAddress + "/subscription" + subscriptionId
+	url := "https://preprod.api.mtn.com/v2/messages/sms/outbound/" + senderAddress + "/subscription/" + subscriptionId
 
 	request, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
