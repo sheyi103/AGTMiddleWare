@@ -2,7 +2,6 @@ package api
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sheyi103/agtMiddleware/madapi"
@@ -19,7 +18,7 @@ type smsNotifyRequest struct {
 	SenderAddress   string    `json:"senderAddress" binding:"required"`
 	ReceiverAddress string    `json:"receiverAddress" binding:"required"`
 	Message         string    `json:"message" binding:"required"`
-	Created         time.Time `json:"created" binding:"required"`
+	Created         string `json:"created" binding:"required"`
 }
 
 type smsSubscriptionRequest struct {
