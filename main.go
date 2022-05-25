@@ -2,8 +2,11 @@ package main
 
 import (
 	"database/sql"
+	"io"
 	"log"
+	"os"
 
+	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/sheyi103/agtMiddleware/api"
 	db "github.com/sheyi103/agtMiddleware/db/sqlc"
@@ -11,7 +14,8 @@ import (
 )
 
 func main() {
-
+	f, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(f)
 	config, err := util.LoadConfig(".")
 
 	if err != nil {
