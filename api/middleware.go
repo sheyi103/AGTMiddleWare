@@ -73,7 +73,7 @@ func JSONLogMiddleware() gin.HandlerFunc {
 			"method":    c.Request.Method,
 			"path":      c.Request.RequestURI,
 			"status":    c.Writer.Status(),
-			"payload":   c,
+			"payload":   c.ShouldBindJSON(c),
 			// "api_version": util.ApiVersion,
 		})
 
