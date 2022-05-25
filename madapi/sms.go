@@ -26,7 +26,7 @@ type SMSSubscriptionResponse struct {
 	StatusMessage string `json:"statusMessage"`
 	TransactionId string `json:"transactionId"`
 	Data          struct {
-		SubscriptionId string `json:"subscriptionId"`
+		Id string `json:"id"`
 	} `json:"data"`
 }
 
