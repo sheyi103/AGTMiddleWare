@@ -15,6 +15,17 @@ type sendUSSDRequest struct {
 	UssdString  string `json:"ussd_string" binding:"required`
 }
 
+type ussdSubscriptionRequest struct {
+	SenderAddress string `json:"sender_address" binding:"required"`
+	NotifyUrl     string `json:"notify_url" binding:"required"`
+	TargetSystem  string `json:"targetSystem" binding:"required"`
+}
+
+type ussdDeleteSubscriptionRequest struct {
+	SenderAddress  string `json:"sender_address" binding:"required"`
+	SubscriptionId string `json:"subscriptionId" binding:"required"`
+}
+
 func (server *Server) sendUSSD(ctx *gin.Context) {
 	var req sendUSSDRequest
 
@@ -43,5 +54,67 @@ func (server *Server) sendUSSD(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, sendSMS)
+
+}
+
+func (server *Server) ussdSubscription(ctx *gin.Context) {
+	var req ussdSubscriptionRequest
+
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	accessToken, err := madapi.Authorization(
+		server.config.MADAPI_CLIENT_ID,
+		server.config.MADAPI_CLIENT_SECRET,
+	)
+
+	if err != nil {
+
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	//call sms subscription service
+	ussdSubscription, err := madapi.USSDSubscription(accessToken, req.SenderAddress, req.NotifyUrl, req.TargetSystem)
+	if err != nil {
+
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, ussdSubscription)
+
+}
+
+func (server *Server) ussdDeleteSubscription(ctx *gin.Context) {
+	var req smsDeleteSubscriptionRequest
+
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	accessToken, err := madapi.Authorization(
+		server.config.MADAPI_CLIENT_ID,
+		server.config.MADAPI_CLIENT_SECRET,
+	)
+
+	if err != nil {
+
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	//call sms subscription service
+	ussdDeleteSubscription, err := madapi.USSDDeleteSubscription(accessToken, req.SubscriptionId)
+	if err != nil {
+
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, ussdDeleteSubscription)
 
 }

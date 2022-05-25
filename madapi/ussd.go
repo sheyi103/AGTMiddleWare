@@ -22,6 +22,26 @@ type USSDResponse struct {
 	} `json:"data"`
 }
 
+type USSDSubscriptionResponse struct {
+	// apiProductList     string `json:"api_product_list"`
+	StatusCode    string `json:"statusCode"`
+	StatusMessage string `json:"statusMessage"`
+	TransactionId string `json:"transactionId"`
+	Data          struct {
+		SubscriptionId string `json:"subscriptionId"`
+	} `json:"data"`
+}
+
+type USSDDeleteSubscriptionResponse struct {
+	// apiProductList     string `json:"api_product_list"`
+	StatusCode    string `json:"statusCode"`
+	StatusMessage string `json:"statusMessage"`
+	TransactionId string `json:"transactionId"`
+	Data          struct {
+		SubscriptionId string `json:"subscriptionId"`
+	} `json:"data"`
+}
+
 func SendOutBoundUSSD(accessToken string, sessionId string, messageType string, msisdn string, serviceCode string, ussdString string) (USSDResponse, error) {
 
 	var bearer = "Bearer " + accessToken
@@ -62,4 +82,74 @@ func SendOutBoundUSSD(accessToken string, sessionId string, messageType string, 
 	// response := authorization.AccessToken
 
 	return ussdResponse, nil
+}
+
+func USSDSubscription(accessToken string, senderAddress string, notifyUrl string, targetSystem string) (USSDSubscriptionResponse, error) {
+
+	var bearer = "Bearer " + accessToken
+	url := "https://preprod.api.mtn.com/v1/messages/ussd/subscription"
+	payload := map[string]interface{}{
+		"serviceCode":  senderAddress,
+		"callbackUrl":  notifyUrl,
+		"targetSystem": targetSystem,
+	}
+
+	bytesRepresentation, err := json.Marshal(payload)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(bytesRepresentation))
+	if err != nil {
+		log.Fatalln(err)
+	}
+	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Authorization", bearer)
+
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer response.Body.Close()
+
+	body, _ := ioutil.ReadAll(response.Body)
+	// fmt.Println("response Body:", string(body))
+	fmt.Println("API Response as String:\n" + string(body))
+
+	var ussdSubscriptionResponse USSDSubscriptionResponse
+	json.Unmarshal(body, &ussdSubscriptionResponse)
+	// response := authorization.AccessToken
+
+	return ussdSubscriptionResponse, nil
+}
+
+func USSDDeleteSubscription(accessToken string, subscriptionId string) (USSDDeleteSubscriptionResponse, error) {
+
+	var bearer = "Bearer " + accessToken
+	url := "https://preprod.api.mtn.com/messages/ussd/outbound/subscription" + subscriptionId
+
+	request, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Authorization", bearer)
+
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer response.Body.Close()
+
+	body, _ := ioutil.ReadAll(response.Body)
+	// fmt.Println("response Body:", string(body))
+	fmt.Println("API Response as String:\n" + string(body))
+
+	var ussdDeleteSubscriptionResponse USSDDeleteSubscriptionResponse
+	json.Unmarshal(body, &ussdDeleteSubscriptionResponse)
+	// response := authorization.AccessToken
+
+	return ussdDeleteSubscriptionResponse, nil
 }

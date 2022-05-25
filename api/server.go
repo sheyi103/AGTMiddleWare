@@ -60,6 +60,12 @@ func (server *Server) setUpRouter() {
 
 	authRoutes.POST("/messages/sms/outbound", server.sendSMS)
 	authRoutes.POST("/messages/ussd/outbound", server.sendUSSD)
+	authRoutes.POST("/messages/sms/notify_url", server.SMSNotifyUrl)
+	// authRoutes.POST("/messages/ussd/notify_url", server.USSDNotifyUrl)
+	authRoutes.POST("/messages/sms/outbound/subscription", server.smsSubscription)
+	authRoutes.DELETE("/messages/sms/outbound/subscription", server.smsDeleteSubscription)
+	authRoutes.POST("/messages/ussd/outbound/subscription", server.ussdSubscription)
+	authRoutes.DELETE("/messages/ussd/outbound/subscription", server.ussdDeleteSubscription)
 
 	server.router = router
 }
