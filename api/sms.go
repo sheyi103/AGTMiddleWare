@@ -15,10 +15,10 @@ type sendSMSRequest struct {
 }
 
 type smsNotifyRequest struct {
-	SenderAddress   string    `json:"senderAddress" binding:"required"`
-	ReceiverAddress string    `json:"receiverAddress" binding:"required"`
-	Message         string    `json:"message" binding:"required"`
-	Created         string `json:"created" binding:"required"`
+	SenderAddress   string `json:"senderAddress" binding:"required"`
+	ReceiverAddress string `json:"receiverAddress" binding:"required"`
+	Message         string `json:"message" binding:"required"`
+	Created         int64  `json:"created" binding:"required"`
 }
 
 type smsSubscriptionRequest struct {
