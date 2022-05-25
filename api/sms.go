@@ -40,7 +40,7 @@ type smsDataSyncRequest struct {
 type smsSubscriptionRequest struct {
 	SenderAddress string `json:"sender_address" binding:"required"`
 	NotifyUrl     string `json:"notify_url" binding:"required"`
-	TargetSystem  string `json:"targetSystem" binding:"required"`
+	TargetSystem  string `json:"target_system" binding:"required"`
 }
 
 type smsNotifyRequest struct {
