@@ -25,7 +25,7 @@ type ussdNotifyRequest struct {
 type ussdSubscriptionRequest struct {
 	SenderAddress string `json:"sender_address" binding:"required"`
 	NotifyUrl     string `json:"notify_url" binding:"required"`
-	TargetSystem  string `json:"targetSystem" binding:"required"`
+	TargetSystem  string `json:"target_System" binding:"required"`
 }
 
 type ussdDeleteSubscriptionRequest struct {
