@@ -31,6 +31,26 @@ type USSDSubscriptionResponse struct {
 		Id string `json:"subscriptionId"`
 	} `json:"data"`
 }
+type USSDFlowResponse struct {
+	StatusCode string `json:"statusCode"`
+
+	Data struct {
+		inboundResponse   string `json:"inboundResponse"`
+		userInputRequired bool   `json:"userInputRequired"`
+		messageType       int32  `json:"messageType"`
+		serviceCode       string `json:"serviceCode"`
+		msisdn            string `json:"msisdn"`
+		sessionId         string `json:"sessionId"`
+	} `json:"data"`
+
+	statusMessage string `json:"statusMessage"`
+
+	_link struct {
+		self struct {
+			href string `json:"href"`
+		} `json:"self"`
+	} `json:"_link"`
+}
 
 type USSDDeleteSubscriptionResponse struct {
 	// apiProductList     string `json:"api_product_list"`
@@ -123,7 +143,7 @@ func USSDSubscription(accessToken string, senderAddress string, notifyUrl string
 
 	return ussdSubscriptionResponse, nil
 }
-func USSDNotifyUrl(sessionId, messageType, msisdn, serviceCode, ussdString, notifyUrl string) (int32, error) {
+func USSDNotifyUrl(sessionId, messageType, msisdn, serviceCode, ussdString, notifyUrl string) (USSDFlowResponse, error) {
 
 	url := notifyUrl
 	payload := map[string]interface{}{
@@ -152,15 +172,14 @@ func USSDNotifyUrl(sessionId, messageType, msisdn, serviceCode, ussdString, noti
 	}
 	defer response.Body.Close()
 
-	// body, _ := ioutil.ReadAll(response.Status)
-	// fmt.Println("response Body:", string(body))
-	// fmt.Println("API Response as String:\n" + string(body))
+	body, _ := ioutil.ReadAll(response.Body)
+	fmt.Println("response Body:", string(body))
+	fmt.Println("API Response as String:\n" + string(body))
 
-	// var smsSubscriptionResponse SMSSubscriptionResponse
-	// json.Unmarshal(body, &smsSubscriptionResponse)
-	// response := authorization.AccessToken
+	var ussdResponse USSDFlowResponse
+	json.Unmarshal(body, &ussdResponse)
 
-	return http.StatusOK, nil
+	return ussdResponse, nil
 }
 
 func USSDDeleteSubscription(accessToken string, subscriptionId string) (USSDDeleteSubscriptionResponse, error) {
