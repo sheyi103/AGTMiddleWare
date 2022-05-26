@@ -114,11 +114,7 @@ func (server *Server) smsSubscription(ctx *gin.Context) {
 	//use the token to query for the users id
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 
-	log.Println(authPayload.Username)
-
 	userId, err := server.store.GetUserByUsername(ctx, authPayload.Username)
-
-	log.Println(userId)
 
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -132,8 +128,6 @@ func (server *Server) smsSubscription(ctx *gin.Context) {
 	}
 	service, err := server.store.GetServiceByUserId(ctx, args)
 
-	log.Println(service)
-
 	if err != nil {
 
 		ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -142,11 +136,9 @@ func (server *Server) smsSubscription(ctx *gin.Context) {
 
 	//update the notify url with the request notify url
 	updateargs := db.UpdateNotifyEndpointByIdParams{
-		NotificationEndpoint: service.NotificationEndpoint,
+		NotificationEndpoint: req.NotifyUrl,
 		ID:                   service.ID,
 	}
-
-	log.Println(updateargs)
 
 	update, err := server.store.UpdateNotifyEndpointById(ctx, updateargs)
 
