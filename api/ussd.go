@@ -11,19 +11,19 @@ import (
 )
 
 type sendUSSDRequest struct {
-	SessionId   string `json:"session_id" binding:"required`
-	MessageType string `json:"message_type" binding:"required`
+	SessionId   string `json:"sessionId" binding:"required`
+	MessageType string `json:"messageType" binding:"required`
 	Msisdn      string `json:"msisdn" binding:"required`
-	ServiceCode string `json:"service_code" binding:"required`
-	UssdString  string `json:"ussd_string" binding:"required`
+	ServiceCode string `json:"serviceCode" binding:"required`
+	UssdString  string `json:"ussdString" binding:"required`
 }
 
-type ussdNotifyRequest struct {
-	SenderAddress   string `json:"senderAddress" binding:"required"`
-	ReceiverAddress string `json:"receiverAddress" binding:"required"`
-	Message         string `json:"message" binding:"required"`
-	Created         int64  `json:"created" binding:"required"`
-}
+// type ussdNotifyRequest struct {
+// 	SenderAddress   string `json:"senderAddress" binding:"required"`
+// 	ReceiverAddress string `json:"receiverAddress" binding:"required"`
+// 	Message         string `json:"message" binding:"required"`
+// 	Created         int64  `json:"created" binding:"required"`
+// }
 
 type ussdSubscriptionRequest struct {
 	SenderAddress string `json:"sender_address" binding:"required"`
@@ -175,9 +175,6 @@ func (server *Server) USSDNotifyUrl(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-	//query the database using the receiverAddress(shortcode )	where service is SMS
-	//return the notify url that was updated earlier
-	//forward traffic to the endpoint
 
 	shortcodeId, err := server.store.GetShortcodeByShortCode(ctx, req.ServiceCode)
 	if err != nil {
@@ -203,6 +200,11 @@ func (server *Server) USSDNotifyUrl(ctx *gin.Context) {
 	//call sms NotifyURl service
 	_, err = madapi.USSDNotifyUrl(req.SessionId, req.MessageType, req.Msisdn, req.ServiceCode, req.UssdString, notifyEndpoint.NotificationEndpoint)
 
-	ctx.JSON(http.StatusOK, req)
+	if err != nil {
+
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, nil)
 
 }

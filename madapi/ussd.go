@@ -132,7 +132,6 @@ func USSDNotifyUrl(sessionId, messageType, msisdn, serviceCode, ussdString, noti
 		"msisdn":      msisdn,
 		"serviceCode": serviceCode,
 		"ussdString":  ussdString,
-		"notifyUrl":   notifyUrl,
 	}
 
 	bytesRepresentation, err := json.Marshal(payload)
