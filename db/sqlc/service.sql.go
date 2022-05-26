@@ -128,6 +128,42 @@ func (q *Queries) GetServiceByShortcodeId(ctx context.Context, shortcodeID int32
 	return i, err
 }
 
+const getServiceByUserId = `-- name: GetServiceByUserId :one
+SELECT id, shortcode_id, user_id, service_name, service_id, service_interface, service, service_type, product_id, node_id, subscription_id, subscription_description, base_url, datasync_endpoint, notification_endpoint, network_type, created_at, updated_at FROM services
+WHERE user_id = ? && service=? LIMIT 1
+`
+
+type GetServiceByUserIdParams struct {
+	UserID  int32           `json:"user_id"`
+	Service ServicesService `json:"service"`
+}
+
+func (q *Queries) GetServiceByUserId(ctx context.Context, arg GetServiceByUserIdParams) (Service, error) {
+	row := q.db.QueryRowContext(ctx, getServiceByUserId, arg.UserID, arg.Service)
+	var i Service
+	err := row.Scan(
+		&i.ID,
+		&i.ShortcodeID,
+		&i.UserID,
+		&i.ServiceName,
+		&i.ServiceID,
+		&i.ServiceInterface,
+		&i.Service,
+		&i.ServiceType,
+		&i.ProductID,
+		&i.NodeID,
+		&i.SubscriptionID,
+		&i.SubscriptionDescription,
+		&i.BaseUrl,
+		&i.DatasyncEndpoint,
+		&i.NotificationEndpoint,
+		&i.NetworkType,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const listService = `-- name: ListService :many
 SELECT id, shortcode_id, user_id, service_name, service_id, service_interface, service, service_type, product_id, node_id, subscription_id, subscription_description, base_url, datasync_endpoint, notification_endpoint, network_type, created_at, updated_at FROM services
 ORDER BY id
@@ -180,6 +216,20 @@ func (q *Queries) ListService(ctx context.Context, arg ListServiceParams) ([]Ser
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateNotifyEndpointById = `-- name: UpdateNotifyEndpointById :execresult
+UPDATE services SET notification_endpoint = ?
+WHERE id = ?
+`
+
+type UpdateNotifyEndpointByIdParams struct {
+	NotificationEndpoint string `json:"notification_endpoint"`
+	ID                   int32  `json:"id"`
+}
+
+func (q *Queries) UpdateNotifyEndpointById(ctx context.Context, arg UpdateNotifyEndpointByIdParams) (sql.Result, error) {
+	return q.db.ExecContext(ctx, updateNotifyEndpointById, arg.NotificationEndpoint, arg.ID)
 }
 
 const updateService = `-- name: UpdateService :execresult

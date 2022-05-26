@@ -6,7 +6,9 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	db "github.com/sheyi103/agtMiddleware/db/sqlc"
 	"github.com/sheyi103/agtMiddleware/madapi"
+	"github.com/sheyi103/agtMiddleware/token"
 )
 
 type sendSMSRequest struct {
@@ -108,9 +110,46 @@ func (server *Server) smsSubscription(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
+	//use the token to query for the users id
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
+	userId, err := server.store.GetUserByUsername(ctx, authPayload.Username)
+
+	if err != nil {
+
+		ctx.JSON(http.StatusNotFound, errorResponse(err))
+		return
+	}
+
+	//once you have the users_id use it to query the service account
+	args := db.GetServiceByUserIdParams{
+		UserID:  userId.ID,
+		Service: "SMS",
+	}
+	service, err := server.store.GetServiceByUserId(ctx, args)
+
+	if err != nil {
+
+		ctx.JSON(http.StatusNotFound, errorResponse(err))
+		return
+	}
+
+	//update the notify url with the request notify url
+	updateargs := db.UpdateNotifyEndpointByIdParams{
+		NotificationEndpoint: service.NotificationEndpoint,
+		ID:                   service.ID,
+	}
+	_, err = server.store.UpdateNotifyEndpointById(ctx, updateargs)
+
+	if err != nil {
+
+		ctx.JSON(http.StatusNotFound, errorResponse(err))
+		return
+	}
+	//get the agt notify url from env and send it to madapi subscription
 
 	//call sms subscription service
-	smsSubscription, err := madapi.SMSSubscription(accessToken, req.SenderAddress, req.NotifyUrl, req.TargetSystem)
+	smsSubscription, err := madapi.SMSSubscription(accessToken, req.SenderAddress, server.config.AGT_NOTIFY_URL, req.TargetSystem)
 	if err != nil {
 
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
@@ -163,15 +202,31 @@ func (server *Server) SMSNotifyUrl(ctx *gin.Context) {
 		return
 	}
 
-	//call sms subscription service
-	// smsSubscription, err := madapi.SMSSubscription(accessToken, req.SenderAddress, req.NotifyUrl, req.TargetSystem)
-	// if err != nil {
+	//query the service table using the receiverAddress(shortcode )	where service is SMS to get notify url
+	shortcodeId, err := server.store.GetShortcodeByShortCode(ctx, req.ReceiverAddress)
+	if err != nil {
 
-	// 	ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-	// 	return
-	// }
+		ctx.JSON(http.StatusNotFound, errorResponse(err))
+		return
+	}
 
-	ctx.JSON(http.StatusOK, req)
+	notifyEndpoint, err := server.store.GetServiceByShortcodeId(ctx, shortcodeId)
+	if err != nil {
+
+		ctx.JSON(http.StatusNotFound, errorResponse(err))
+		return
+	}
+	//forward traffic to the endpoint
+
+	//call sms NotifyURl service
+	_, err = madapi.SMSNotifyUrl(req.SenderAddress, req.ReceiverAddress, req.Message, req.Created, notifyEndpoint.NotificationEndpoint)
+	if err != nil {
+
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, nil)
 
 }
 

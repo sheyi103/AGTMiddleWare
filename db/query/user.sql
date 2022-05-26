@@ -13,6 +13,10 @@ WHERE id = ? LIMIT 1;
 SELECT * FROM users
 WHERE client_id = ? && client_secret = ? LIMIT 1;
 
+-- name: GetUserByUsername :one
+SELECT * FROM users
+WHERE client_id = ? LIMIT 1;
+
 
 -- name: ListUsers :many
 SELECT * FROM users

@@ -16,6 +16,7 @@ type Config struct {
 	AccessTokenDuration  time.Duration `mapstructure:"ACESS_TOKEN_DURATION"`
 	MADAPI_CLIENT_ID     string        `mapstructure:"MADAPI_CLIENT_ID"`
 	MADAPI_CLIENT_SECRET string        `mapstructure:"MADAPI_CLIENT_SECRET"`
+	AGT_NOTIFY_URL       string        `mapstructure:"AGT_NOTIFY_URL"`
 }
 
 func LoadConfig(path string) (config Config, err error) {

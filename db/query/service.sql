@@ -9,6 +9,11 @@ INSERT INTO services (
 SELECT * FROM services
 WHERE id = ? LIMIT 1;
 
+-- name: GetServiceByUserId :one
+SELECT * FROM services
+WHERE user_id = ? && service=? LIMIT 1;
+
+
 -- name: GetServiceByShortcodeId :one
 SELECT * FROM services
 WHERE shortcode_id = ? LIMIT 1;
@@ -22,6 +27,10 @@ OFFSET ?;
 
 -- name: UpdateService :execresult
 UPDATE services SET  service_name= ?, base_url= ?, datasync_endpoint = ?, notification_endpoint = ?
+WHERE id = ?;
+
+-- name: UpdateNotifyEndpointById :execresult
+UPDATE services SET notification_endpoint = ?
 WHERE id = ?;
 
 -- name: DeleteService :exec

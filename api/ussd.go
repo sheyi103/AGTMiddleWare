@@ -82,6 +82,11 @@ func (server *Server) ussdSubscription(ctx *gin.Context) {
 		return
 	}
 
+	//use the token to query for the users id
+	//once you have the users_id use it to query the service account
+	//update the notify url with the request notify url
+	//get the agt notify url from env and send it to madapi subscription
+
 	//call sms subscription service
 	ussdSubscription, err := madapi.USSDSubscription(accessToken, req.SenderAddress, req.NotifyUrl, req.TargetSystem)
 	if err != nil {
@@ -132,6 +137,9 @@ func (server *Server) USSDNotifyUrl(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
+	//query the database using the receiverAddress(shortcode )	where service is SMS
+	//return the notify url that was updated earlier
+	//forward traffic to the endpoint
 
 	//call sms subscription service
 	// smsSubscription, err := madapi.SMSSubscription(accessToken, req.SenderAddress, req.NotifyUrl, req.TargetSystem)

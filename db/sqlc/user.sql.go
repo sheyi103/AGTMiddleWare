@@ -105,6 +105,30 @@ func (q *Queries) GetUserByClientId(ctx context.Context, arg GetUserByClientIdPa
 	return i, err
 }
 
+const getUserByUsername = `-- name: GetUserByUsername :one
+SELECT id, name, password, client_id, client_secret, email, phone_number, contact_person, role_id, created_at, updated_at FROM users
+WHERE client_id = ? LIMIT 1
+`
+
+func (q *Queries) GetUserByUsername(ctx context.Context, clientID string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByUsername, clientID)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Password,
+		&i.ClientID,
+		&i.ClientSecret,
+		&i.Email,
+		&i.PhoneNumber,
+		&i.ContactPerson,
+		&i.RoleID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const listUsers = `-- name: ListUsers :many
 SELECT id, name, password, client_id, client_secret, email, phone_number, contact_person, role_id, created_at, updated_at FROM users
 ORDER BY id

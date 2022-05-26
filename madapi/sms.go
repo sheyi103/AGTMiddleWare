@@ -119,6 +119,44 @@ func SMSSubscription(accessToken string, senderAddress string, notifyUrl string,
 	return smsSubscriptionResponse, nil
 }
 
+func SMSNotifyUrl(senderAddress string, receiverAddress string, message string, created int64, notifyUrl string) (int32, error) {
+
+	url := notifyUrl
+	payload := map[string]interface{}{
+		"senderAddress":   senderAddress,
+		"receiverAddress": receiverAddress,
+		"message":         message,
+	}
+
+	bytesRepresentation, err := json.Marshal(payload)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(bytesRepresentation))
+	if err != nil {
+		log.Fatalln(err)
+	}
+	request.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer response.Body.Close()
+
+	// body, _ := ioutil.ReadAll(response.Status)
+	// fmt.Println("response Body:", string(body))
+	// fmt.Println("API Response as String:\n" + string(body))
+
+	// var smsSubscriptionResponse SMSSubscriptionResponse
+	// json.Unmarshal(body, &smsSubscriptionResponse)
+	// response := authorization.AccessToken
+
+	return http.StatusOK, nil
+}
+
 func SMSDeleteSubscription(accessToken string, senderAddress string, subscriptionId string) (SMSDeleteSubscriptionResponse, error) {
 
 	var bearer = "Bearer " + accessToken
