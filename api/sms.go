@@ -141,7 +141,7 @@ func (server *Server) smsSubscription(ctx *gin.Context) {
 		NotificationEndpoint: service.NotificationEndpoint,
 		ID:                   service.ID,
 	}
-	notify, err := server.store.UpdateNotifyEndpointById(ctx, updateargs)
+	_, err = server.store.UpdateNotifyEndpointById(ctx, updateargs)
 
 	if err != nil {
 
