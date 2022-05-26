@@ -1,10 +1,13 @@
 package api
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	db "github.com/sheyi103/agtMiddleware/db/sqlc"
 	"github.com/sheyi103/agtMiddleware/madapi"
+	"github.com/sheyi103/agtMiddleware/token"
 )
 
 type sendUSSDRequest struct {
@@ -86,9 +89,44 @@ func (server *Server) ussdSubscription(ctx *gin.Context) {
 	//once you have the users_id use it to query the service account
 	//update the notify url with the request notify url
 	//get the agt notify url from env and send it to madapi subscription
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
+	userId, err := server.store.GetUserByUsername(ctx, authPayload.Username)
+
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, errorResponse(err))
+		return
+	}
+
+	//once you have the users_id use it to query the service account
+	args := db.GetServiceByUserIdParams{
+		UserID:  userId.ID,
+		Service: "USSD",
+	}
+	service, err := server.store.GetServiceByUserId(ctx, args)
+
+	if err != nil {
+
+		ctx.JSON(http.StatusNotFound, errorResponse(err))
+		return
+	}
+
+	//update the notify url with the request notify url
+	updateargs := db.UpdateNotifyEndpointByIdParams{
+		NotificationEndpoint: req.NotifyUrl,
+		ID:                   service.ID,
+	}
+
+	_, err = server.store.UpdateNotifyEndpointById(ctx, updateargs)
+
+	if err != nil {
+
+		ctx.JSON(http.StatusNotFound, errorResponse(err))
+		return
+	}
 
 	//call sms subscription service
-	ussdSubscription, err := madapi.USSDSubscription(accessToken, req.SenderAddress, req.NotifyUrl, req.TargetSystem)
+	ussdSubscription, err := madapi.USSDSubscription(accessToken, req.SenderAddress, server.config.AGT_NOTIFY_URL, req.TargetSystem)
 	if err != nil {
 
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
@@ -141,13 +179,27 @@ func (server *Server) USSDNotifyUrl(ctx *gin.Context) {
 	//return the notify url that was updated earlier
 	//forward traffic to the endpoint
 
-	//call sms subscription service
-	// smsSubscription, err := madapi.SMSSubscription(accessToken, req.SenderAddress, req.NotifyUrl, req.TargetSystem)
-	// if err != nil {
+	shortcodeId, err := server.store.GetShortcodeByShortCode(ctx, req.ServiceCode)
+	if err != nil {
 
-	// 	ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-	// 	return
-	// }
+		ctx.JSON(http.StatusNotFound, errorResponse(err))
+		return
+	}
+
+	log.Println(shortcodeId)
+
+	notifyEndpoint, err := server.store.GetServiceByShortcodeId(ctx, shortcodeId)
+	if err != nil {
+
+		ctx.JSON(http.StatusNotFound, errorResponse(err))
+		return
+	}
+	log.Println(notifyEndpoint.NotificationEndpoint)
+	//forward traffic to the endpoint
+
+	//call sms NotifyURl service
+	_, err = madapi.USSDNotifyUrl(req.SessionId, req.MessageType, req.Msisdn, req.ServiceCode,req.UssdString, notifyEndpoint.NotificationEndpoint)
+
 
 	ctx.JSON(http.StatusOK, req)
 

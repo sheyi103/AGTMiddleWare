@@ -140,14 +140,13 @@ func (server *Server) smsSubscription(ctx *gin.Context) {
 		ID:                   service.ID,
 	}
 
-	update, err := server.store.UpdateNotifyEndpointById(ctx, updateargs)
+	_, err = server.store.UpdateNotifyEndpointById(ctx, updateargs)
 
 	if err != nil {
 
 		ctx.JSON(http.StatusNotFound, errorResponse(err))
 		return
 	}
-	log.Print(update)
 
 	//get the agt notify url from env and send it to madapi subscription
 
