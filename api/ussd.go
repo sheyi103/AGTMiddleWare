@@ -168,6 +168,27 @@ func (server *Server) ussdDeleteSubscription(ctx *gin.Context) {
 
 }
 
+type USSDFlowResp struct {
+	StatusCode string `json:"statusCode"`
+
+	Data struct {
+		InboundResponse   string `json:"inboundResponse"`
+		UserInputRequired bool   `json:"userInputRequired"`
+		MessageType       int32  `json:"messageType"`
+		ServiceCode       string `json:"serviceCode"`
+		Msisdn            string `json:"msisdn"`
+		SessionId         string `json:"sessionId"`
+	} `json:"data"`
+
+	StatusMessage string `json:"statusMessage"`
+
+	_ink struct {
+		self struct {
+			href string `json:"href"`
+		} `json:"self"`
+	} `json:"_link"`
+}
+
 func (server *Server) USSDNotifyUrl(ctx *gin.Context) {
 	var req sendUSSDRequest
 
@@ -198,15 +219,16 @@ func (server *Server) USSDNotifyUrl(ctx *gin.Context) {
 	//forward traffic to the endpoint
 
 	//call sms NotifyURl service
-	ussdResponse, err := madapi.USSDNotifyUrl(req.SessionId, req.MessageType, req.Msisdn, req.ServiceCode, req.UssdString, notifyEndpoint.NotificationEndpoint)
-	log.Printf("inside the controller")
-	log.Println(ussdResponse)
+	ussdRes, err := madapi.USSDNotifyUrl(req.SessionId, req.MessageType, req.Msisdn, req.ServiceCode, req.UssdString, notifyEndpoint.NotificationEndpoint)
+	log.Println("Inside controller")
+	log.Println(ussdRes)
 
 	if err != nil {
 
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
-	ctx.JSON(http.StatusOK, ussdResponse)
+
+	ctx.JSON(http.StatusOK, ussdRes)
 
 }
