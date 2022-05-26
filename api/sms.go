@@ -118,6 +118,8 @@ func (server *Server) smsSubscription(ctx *gin.Context) {
 
 	userId, err := server.store.GetUserByUsername(ctx, authPayload.Username)
 
+	log.Println(userId)
+
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, errorResponse(err))
 		return
@@ -130,6 +132,8 @@ func (server *Server) smsSubscription(ctx *gin.Context) {
 	}
 	service, err := server.store.GetServiceByUserId(ctx, args)
 
+	log.Println(service)
+
 	if err != nil {
 
 		ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -141,6 +145,8 @@ func (server *Server) smsSubscription(ctx *gin.Context) {
 		NotificationEndpoint: service.NotificationEndpoint,
 		ID:                   service.ID,
 	}
+
+	log.Println(updateargs)
 
 	update, err := server.store.UpdateNotifyEndpointById(ctx, updateargs)
 
