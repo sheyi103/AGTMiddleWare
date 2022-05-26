@@ -99,11 +99,16 @@ func (q *Queries) GetService(ctx context.Context, id int32) (Service, error) {
 
 const getServiceByShortcodeId = `-- name: GetServiceByShortcodeId :one
 SELECT id, shortcode_id, user_id, service_name, service_id, service_interface, service, service_type, product_id, node_id, subscription_id, subscription_description, base_url, datasync_endpoint, notification_endpoint, network_type, created_at, updated_at FROM services
-WHERE shortcode_id = ? LIMIT 1
+WHERE shortcode_id = ? && service= ? LIMIT 1
 `
 
-func (q *Queries) GetServiceByShortcodeId(ctx context.Context, shortcodeID int32) (Service, error) {
-	row := q.db.QueryRowContext(ctx, getServiceByShortcodeId, shortcodeID)
+type GetServiceByShortcodeIdParams struct {
+	ShortcodeID int32           `json:"shortcode_id"`
+	Service     ServicesService `json:"service"`
+}
+
+func (q *Queries) GetServiceByShortcodeId(ctx context.Context, arg GetServiceByShortcodeIdParams) (Service, error) {
+	row := q.db.QueryRowContext(ctx, getServiceByShortcodeId, arg.ShortcodeID, arg.Service)
 	var i Service
 	err := row.Scan(
 		&i.ID,

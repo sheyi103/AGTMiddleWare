@@ -186,9 +186,12 @@ func (server *Server) USSDNotifyUrl(ctx *gin.Context) {
 		return
 	}
 
-	log.Println(shortcodeId)
+	args := db.GetServiceByShortcodeIdParams{
+		ShortcodeID: shortcodeId,
+		Service:     "USSD",
+	}
 
-	notifyEndpoint, err := server.store.GetServiceByShortcodeId(ctx, shortcodeId)
+	notifyEndpoint, err := server.store.GetServiceByShortcodeId(ctx, args)
 	if err != nil {
 
 		ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -198,8 +201,7 @@ func (server *Server) USSDNotifyUrl(ctx *gin.Context) {
 	//forward traffic to the endpoint
 
 	//call sms NotifyURl service
-	_, err = madapi.USSDNotifyUrl(req.SessionId, req.MessageType, req.Msisdn, req.ServiceCode,req.UssdString, notifyEndpoint.NotificationEndpoint)
-
+	_, err = madapi.USSDNotifyUrl(req.SessionId, req.MessageType, req.Msisdn, req.ServiceCode, req.UssdString, notifyEndpoint.NotificationEndpoint)
 
 	ctx.JSON(http.StatusOK, req)
 

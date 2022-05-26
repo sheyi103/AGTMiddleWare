@@ -213,8 +213,12 @@ func (server *Server) SMSNotifyUrl(ctx *gin.Context) {
 	}
 
 	log.Println(shortcodeId)
+	args := db.GetServiceByShortcodeIdParams{
+		ShortcodeID: shortcodeId,
+		Service:     "SMS",
+	}
 
-	notifyEndpoint, err := server.store.GetServiceByShortcodeId(ctx, shortcodeId)
+	notifyEndpoint, err := server.store.GetServiceByShortcodeId(ctx, args)
 	if err != nil {
 
 		ctx.JSON(http.StatusNotFound, errorResponse(err))
