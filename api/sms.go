@@ -2,6 +2,7 @@ package api
 
 import (
 	"io"
+	"log"
 	"net/http"
 	"os"
 
@@ -112,6 +113,8 @@ func (server *Server) smsSubscription(ctx *gin.Context) {
 	}
 	//use the token to query for the users id
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
+	log.Println(authPayload.Username)
 
 	userId, err := server.store.GetUserByUsername(ctx, authPayload.Username)
 
