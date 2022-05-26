@@ -200,11 +200,14 @@ func (server *Server) USSDNotifyUrl(ctx *gin.Context) {
 	//call sms NotifyURl service
 	ussdResponse, err := madapi.USSDNotifyUrl(req.SessionId, req.MessageType, req.Msisdn, req.ServiceCode, req.UssdString, notifyEndpoint.NotificationEndpoint)
 
+	log.Println(ussdResponse)
+
 	if err != nil {
 
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 	ctx.JSON(http.StatusOK, ussdResponse)
+	return
 
 }
