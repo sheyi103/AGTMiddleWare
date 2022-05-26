@@ -208,6 +208,5 @@ func (server *Server) USSDNotifyUrl(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, ussdResponse)
-	return
 
 }
