@@ -151,7 +151,7 @@ func (server *Server) smsSubscription(ctx *gin.Context) {
 	//get the agt notify url from env and send it to madapi subscription
 
 	//call sms subscription service
-	smsSubscription, err := madapi.SMSSubscription(accessToken, req.SenderAddress, server.config.AGT_NOTIFY_URL, req.TargetSystem)
+	smsSubscription, err := madapi.SMSSubscription(accessToken, req.SenderAddress, server.config.AGT_SMS_NOTIFY_URL, req.TargetSystem)
 	if err != nil {
 
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))

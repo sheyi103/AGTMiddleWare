@@ -126,7 +126,7 @@ func (server *Server) ussdSubscription(ctx *gin.Context) {
 	}
 
 	//call sms subscription service
-	ussdSubscription, err := madapi.USSDSubscription(accessToken, req.SenderAddress, server.config.AGT_NOTIFY_URL, req.TargetSystem)
+	ussdSubscription, err := madapi.USSDSubscription(accessToken, req.SenderAddress, server.config.AGT_USSD_NOTIFY_URL, req.TargetSystem)
 	if err != nil {
 
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
