@@ -35,19 +35,19 @@ type USSDFlowResponse struct {
 	StatusCode string `json:"statusCode"`
 
 	Data struct {
-		inboundResponse   string `json:"inboundResponse"`
-		userInputRequired bool   `json:"userInputRequired"`
-		messageType       int32  `json:"messageType"`
-		serviceCode       string `json:"serviceCode"`
-		msisdn            string `json:"msisdn"`
-		sessionId         string `json:"sessionId"`
+		InboundResponse   string `json:"inboundResponse"`
+		UserInputRequired bool   `json:"userInputRequired"`
+		MessageType       int32  `json:"messageType"`
+		ServiceCode       string `json:"serviceCode"`
+		Msisdn            string `json:"msisdn"`
+		SessionId         string `json:"sessionId"`
 	} `json:"data"`
 
-	statusMessage string `json:"statusMessage"`
+	StatusMessage string `json:"statusMessage"`
 
-	_link struct {
-		self struct {
-			href string `json:"href"`
+	Llink struct {
+		Self struct {
+			Href string `json:"href"`
 		} `json:"self"`
 	} `json:"_link"`
 }

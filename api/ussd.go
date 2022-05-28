@@ -219,9 +219,9 @@ func (server *Server) USSDNotifyUrl(ctx *gin.Context) {
 	//forward traffic to the endpoint
 
 	//call sms NotifyURl service
-	ussdRes, err := madapi.USSDNotifyUrl(req.SessionId, req.MessageType, req.Msisdn, req.ServiceCode, req.UssdString, notifyEndpoint.NotificationEndpoint)
+	ussdResponse, err := madapi.USSDNotifyUrl(req.SessionId, req.MessageType, req.Msisdn, req.ServiceCode, req.UssdString, notifyEndpoint.NotificationEndpoint)
 	log.Println("Inside controller")
-	log.Println(ussdRes)
+	log.Println(ussdResponse)
 
 	if err != nil {
 
@@ -229,6 +229,6 @@ func (server *Server) USSDNotifyUrl(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, ussdRes)
+	ctx.JSON(http.StatusOK, ussdResponse)
 
 }
