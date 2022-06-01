@@ -44,9 +44,9 @@ func (server *Server) setUpRouter() {
 	router.POST("/users/login", server.loginUser)
 	router.POST("/roles", server.createRole)
 	router.GET("/users/:id", server.getUser)
-	router.POST("/sms/notify_url", server.SMSNotifyUrl)
-	router.POST("/ussd/notify_url", server.USSDNotifyUrl)
-	router.POST("/data_sync", server.dataSync)
+	router.POST("/sms/notifyurl", server.SMSNotifyUrl)
+	router.POST("/ussd/notifyurl", server.USSDNotifyUrl)
+	router.POST("/madapi/datasync", server.dataSync)
 	// authRoutes.Use(JSONLogMiddleware())
 
 	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
@@ -73,6 +73,8 @@ func (server *Server) setUpRouter() {
 	authRoutes.POST("/messages/sms/outbound/subscription", server.smsSubscription)
 	authRoutes.DELETE("/messages/sms/outbound/subscription", server.smsDeleteSubscription)
 	authRoutes.POST("/messages/ussd/outbound/subscription", server.ussdSubscription)
+	authRoutes.POST("/customer/subscription", server.customerSubscription)
+	authRoutes.DELETE("/customer/unsubscription", server.customerUnSubscription)
 	authRoutes.DELETE("/messages/ussd/outbound/subscription", server.ussdDeleteSubscription)
 
 	server.router = router
