@@ -1,10 +1,8 @@
 package api
 
 import (
-	"io"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	db "github.com/sheyi103/agtMiddleware/db/sqlc"
@@ -173,11 +171,9 @@ func (server *Server) smsDeleteSubscription(ctx *gin.Context) {
 }
 
 func (server *Server) SMSNotifyUrl(ctx *gin.Context) {
-	f, _ := os.Create("gin.log")
-	gin.DefaultWriter = io.MultiWriter(f)
 
 	var req smsNotifyRequest
-	log.Println(ctx.Request)
+
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
@@ -185,7 +181,6 @@ func (server *Server) SMSNotifyUrl(ctx *gin.Context) {
 
 	//query the service table using the receiverAddress(shortcode )	where service is SMS to get notify url
 	shortcodeId, err := server.store.GetShortcodeByShortCode(ctx, req.ReceiverAddress)
-
 	if err != nil {
 
 		ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -204,16 +199,16 @@ func (server *Server) SMSNotifyUrl(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, errorResponse(err))
 		return
 	}
-	log.Println(notifyEndpoint)
+	log.Println(notifyEndpoint.NotificationEndpoint)
 	//forward traffic to the endpoint
 
 	//call sms NotifyURl service
-	// _, err = madapi.SMSNotifyUrl(req.SenderAddress, req.ReceiverAddress, req.Message, req.Created, notifyEndpoint.NotificationEndpoint)
-	// if err != nil {
+	_, err = madapi.SMSNotifyUrl(req.SenderAddress, req.ReceiverAddress, req.Message, req.Created, notifyEndpoint.NotificationEndpoint)
+	if err != nil {
 
-	// 	ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-	// 	return
-	// }
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
 
 	ctx.JSON(http.StatusOK, nil)
 
