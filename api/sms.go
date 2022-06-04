@@ -187,7 +187,7 @@ func (server *Server) SMSNotify(ctx *gin.Context) {
 		return
 	}
 
-	log.Println(shortcodeId)
+	log.Println(req)
 	args := db.GetServiceByShortcodeIdParams{
 		ShortcodeID: shortcodeId,
 		Service:     "SMS",
