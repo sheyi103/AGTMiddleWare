@@ -182,9 +182,9 @@ type USSDFlowResp struct {
 
 	StatusMessage string `json:"statusMessage"`
 
-	_ink struct {
-		self struct {
-			href string `json:"href"`
+	Link struct {
+		Self struct {
+			Href string `json:"href"`
 		} `json:"self"`
 	} `json:"_link"`
 }

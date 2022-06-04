@@ -185,7 +185,7 @@ func USSDNotifyUrl(sessionId, messageType, msisdn, serviceCode, ussdString, noti
 func USSDDeleteSubscription(accessToken string, subscriptionId string) (USSDDeleteSubscriptionResponse, error) {
 
 	var bearer = "Bearer " + accessToken
-	url := "https://preprod.api.mtn.com/v1/messages/ussd/subscription/" + subscriptionId
+	url := "https://prod.api.mtn.com/v1/messages/ussd/subscription/" + subscriptionId
 	log.Println(url)
 
 	request, err := http.NewRequest("DELETE", url, nil)
