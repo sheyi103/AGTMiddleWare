@@ -146,12 +146,12 @@ func SMSNotifyUrl(senderAddress string, receiverAddress string, message string, 
 	}
 	defer response.Body.Close()
 
-	// body, _ := ioutil.ReadAll(response.Status)
-	// fmt.Println("response Body:", string(body))
-	// fmt.Println("API Response as String:\n" + string(body))
+	body, _ := ioutil.ReadAll(response.Body)
+	fmt.Println("response Body:", string(body))
+	fmt.Println("API Response as String:\n" + string(body))
 
-	// var smsSubscriptionResponse SMSSubscriptionResponse
-	// json.Unmarshal(body, &smsSubscriptionResponse)
+	var smsSubscriptionResponse SMSSubscriptionResponse
+	json.Unmarshal(body, &smsSubscriptionResponse)
 	// response := authorization.AccessToken
 
 	return http.StatusOK, nil
