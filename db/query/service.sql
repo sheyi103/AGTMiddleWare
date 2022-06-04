@@ -16,7 +16,7 @@ WHERE user_id = ? && service=? LIMIT 1;
 
 -- name: GetServiceByShortcodeId :one
 SELECT * FROM services
-WHERE shortcode_id = ? && service= ? LIMIT 1;
+WHERE shortcode_id = ? && service= ? && notification_endpoint IS NOT NULL LIMIT 1;
 
 -- name: ListService :many
 SELECT * FROM services

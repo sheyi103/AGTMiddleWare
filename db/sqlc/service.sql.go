@@ -99,7 +99,7 @@ func (q *Queries) GetService(ctx context.Context, id int32) (Service, error) {
 
 const getServiceByShortcodeId = `-- name: GetServiceByShortcodeId :one
 SELECT id, shortcode_id, user_id, service_name, service_id, service_interface, service, service_type, product_id, node_id, subscription_id, subscription_description, base_url, datasync_endpoint, notification_endpoint, network_type, created_at, updated_at FROM services
-WHERE shortcode_id = ? && service= ? LIMIT 1
+WHERE shortcode_id = ? && service= ? && notification_endpoint IS NOT NULL LIMIT 1
 `
 
 type GetServiceByShortcodeIdParams struct {

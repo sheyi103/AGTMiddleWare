@@ -19,8 +19,6 @@ type sendSMSRequest struct {
 	SenderAddress    string   `json:"senderAddress" binding:"required`
 }
 
-
-
 type smsSubscriptionRequest struct {
 	SenderAddress string `json:"sender_address" binding:"required"`
 	NotifyUrl     string `json:"notify_url" binding:"required"`
@@ -187,6 +185,7 @@ func (server *Server) SMSNotifyUrl(ctx *gin.Context) {
 
 	//query the service table using the receiverAddress(shortcode )	where service is SMS to get notify url
 	shortcodeId, err := server.store.GetShortcodeByShortCode(ctx, req.ReceiverAddress)
+	
 	if err != nil {
 
 		ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -219,4 +218,3 @@ func (server *Server) SMSNotifyUrl(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, nil)
 
 }
-
