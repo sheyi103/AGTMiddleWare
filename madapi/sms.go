@@ -150,8 +150,8 @@ func SMSNotifyUrl(senderAddress string, receiverAddress string, message string, 
 	fmt.Println("response Body:", string(body))
 	fmt.Println("API Response as String:\n" + string(body))
 
-	var smsSubscriptionResponse SMSSubscriptionResponse
-	json.Unmarshal(body, &smsSubscriptionResponse)
+	// var smsSubscriptionResponse SMSSubscriptionResponse
+	// json.Unmarshal(body, &smsSubscriptionResponse)
 	// response := authorization.AccessToken
 
 	return http.StatusOK, nil
