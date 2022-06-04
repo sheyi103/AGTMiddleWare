@@ -170,7 +170,7 @@ func (server *Server) smsDeleteSubscription(ctx *gin.Context) {
 
 }
 
-func (server *Server) SMSNotify(ctx *gin.Context) {
+func (server *Server) smsNotify(ctx *gin.Context) {
 
 	var req smsNotifyRequest
 
