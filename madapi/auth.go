@@ -26,7 +26,7 @@ type TokenDetails struct {
 }
 
 func Authorization(clientId, clientSecret string) (string, error) {
-	url := "https://preprod.api.mtn.com/v1/oauth/access_token/accesstoken?grant_type=client_credentials"
+	url := "https://api.mtn.com/v1/oauth/access_token/accesstoken?grant_type=client_credentials"
 
 	s := fmt.Sprintf("grant_type=client_credentials&client_id=%s&client_secret=%s", clientId, clientSecret)
 
