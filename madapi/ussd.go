@@ -107,7 +107,7 @@ func SendOutBoundUSSD(accessToken string, sessionId string, messageType string, 
 func USSDSubscription(accessToken string, senderAddress string, notifyUrl string, targetSystem string) (USSDSubscriptionResponse, error) {
 
 	var bearer = "Bearer " + accessToken
-	url := "https://preprod.api.mtn.com/v1/messages/ussd/subscription"
+	url := "https://api.mtn.com/v1/messages/ussd/subscription"
 	payload := map[string]interface{}{
 		"serviceCode":  senderAddress,
 		"callbackUrl":  notifyUrl,

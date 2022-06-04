@@ -83,7 +83,7 @@ func SendOutBoundSMS(accessToken string, clientCorrelator string, message string
 func SMSSubscription(accessToken string, senderAddress string, notifyUrl string, targetSystem string) (SMSSubscriptionResponse, error) {
 
 	var bearer = "Bearer " + accessToken
-	url := "https://prod.api.mtn.com/v2/messages/sms/outbound/" + senderAddress + "/subscription"
+	url := "https://api.mtn.com/v2/messages/sms/outbound/" + senderAddress + "/subscription"
 	payload := map[string]interface{}{
 		"notifyUrl":    notifyUrl,
 		"targetSystem": targetSystem,
