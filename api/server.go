@@ -44,8 +44,8 @@ func (server *Server) setUpRouter() {
 	router.POST("/users/login", server.loginUser)
 	router.POST("/roles", server.createRole)
 	router.GET("/users/:id", server.getUser)
-	router.POST("/sms/notify_url", server.SMSNotifyUrl)
-	router.POST("/ussd/notify_url", server.USSDNotifyUrl)
+	router.POST("/sms/notify_url", server.SMSNotify)
+	router.POST("/ussd/notify_url", server.USSDNotify)
 	router.POST("/madapi/datasync", server.dataSync)
 	// authRoutes.Use(JSONLogMiddleware())
 

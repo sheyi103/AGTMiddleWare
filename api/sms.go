@@ -170,8 +170,8 @@ func (server *Server) smsDeleteSubscription(ctx *gin.Context) {
 
 }
 
-func (server *Server) SMSNotifyUrl(ctx *gin.Context) {
-	log.Println("inside smsnotify")
+func (server *Server) SMSNotify(ctx *gin.Context) {
+
 	var req smsNotifyRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -186,7 +186,6 @@ func (server *Server) SMSNotifyUrl(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, errorResponse(err))
 		return
 	}
-	log.Println("After shortcode")
 
 	log.Println(shortcodeId)
 	args := db.GetServiceByShortcodeIdParams{
@@ -201,7 +200,6 @@ func (server *Server) SMSNotifyUrl(ctx *gin.Context) {
 		return
 	}
 
-	log.Println("After endpointNotify")
 	log.Println(notifyEndpoint.NotificationEndpoint)
 	//forward traffic to the endpoint
 

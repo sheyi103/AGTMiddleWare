@@ -189,7 +189,7 @@ type USSDFlowResp struct {
 	} `json:"_link"`
 }
 
-func (server *Server) USSDNotifyUrl(ctx *gin.Context) {
+func (server *Server) USSDNotify(ctx *gin.Context) {
 	var req sendUSSDRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
