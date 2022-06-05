@@ -204,12 +204,12 @@ func (server *Server) smsNotify(ctx *gin.Context) {
 	//forward traffic to the endpoint
 
 	//call sms NotifyURl service
-	// _, err = madapi.SMSNotifyUrl(req.SenderAddress, req.ReceiverAddress, req.Message, req.Created, notifyEndpoint.NotificationEndpoint)
-	// if err != nil {
+	_, err = madapi.SMSNotifyUrl(req.SenderAddress, req.ReceiverAddress, req.Message, req.Created, notifyEndpoint.NotificationEndpoint)
+	if err != nil {
 
-	// 	ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-	// 	return
-	// }
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
 
 	ctx.JSON(http.StatusOK, nil)
 
