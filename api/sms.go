@@ -11,28 +11,28 @@ import (
 )
 
 type sendSMSRequest struct {
-	ClientCorrelator string   `json:"clientCorrelator" binding:"required`
-	Message          string   `json:"message" binding:"required`
-	ReceiverAddress  []string `json:"receiverAddress" binding:"required`
-	SenderAddress    string   `json:"senderAddress" binding:"required`
+	ClientCorrelator string   `json:"clientCorrelator"`
+	Message          string   `json:"message"`
+	ReceiverAddress  []string `json:"receiverAddress"`
+	SenderAddress    string   `json:"senderAddress"`
 }
 
 type smsSubscriptionRequest struct {
-	SenderAddress string `json:"sender_address" binding:"required"`
-	NotifyUrl     string `json:"notify_url" binding:"required"`
-	TargetSystem  string `json:"target_system" binding:"required"`
+	SenderAddress string `json:"sender_address" `
+	NotifyUrl     string `json:"notify_url" `
+	TargetSystem  string `json:"target_system" `
 }
 
 type smsNotifyRequest struct {
-	SenderAddress   string `json:"senderAddress" binding:"required"`
-	ReceiverAddress string `json:"receiverAddress" binding:"required"`
-	Message         string `json:"message" binding:"required"`
-	Created         int64  `json:"created" binding:"required"`
+	SenderAddress   string `json:"senderAddress" `
+	ReceiverAddress string `json:"receiverAddress" `
+	Message         string `json:"message" `
+	Created         int64  `json:"created" `
 }
 
 type smsDeleteSubscriptionRequest struct {
-	SenderAddress  string `json:"sender_address" binding:"required"`
-	SubscriptionId string `json:"subscriptionId" binding:"required"`
+	SenderAddress  string `json:"sender_address"`
+	SubscriptionId string `json:"subscriptionId"`
 }
 
 type authorizationResponse struct {

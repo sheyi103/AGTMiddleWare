@@ -4,24 +4,32 @@
  - using env:	export GIN_MODE=release
  - using code:	gin.SetMode(gin.ReleaseMode)
 
-[GIN-debug] POST   /users                    --> github.com/sheyi103/agtMiddleware/api.(*Server).createUser-fm (3 handlers)
-[GIN-debug] POST   /users/login              --> github.com/sheyi103/agtMiddleware/api.(*Server).loginUser-fm (3 handlers)
-[GIN-debug] POST   /roles                    --> github.com/sheyi103/agtMiddleware/api.(*Server).createRole-fm (3 handlers)
-[GIN-debug] GET    /users/:id                --> github.com/sheyi103/agtMiddleware/api.(*Server).getUser-fm (3 handlers)
-[GIN-debug] GET    /users                    --> github.com/sheyi103/agtMiddleware/api.(*Server).listUser-fm (4 handlers)
-[GIN-debug] GET    /roles/:id                --> github.com/sheyi103/agtMiddleware/api.(*Server).getRole-fm (4 handlers)
-[GIN-debug] GET    /roles                    --> github.com/sheyi103/agtMiddleware/api.(*Server).listRole-fm (4 handlers)
-[GIN-debug] POST   /services                 --> github.com/sheyi103/agtMiddleware/api.(*Server).createService-fm (4 handlers)
-[GIN-debug] GET    /services/:id             --> github.com/sheyi103/agtMiddleware/api.(*Server).getService-fm (4 handlers)
-[GIN-debug] GET    /services                 --> github.com/sheyi103/agtMiddleware/api.(*Server).listService-fm (4 handlers)
-[GIN-debug] POST   /shortcode                --> github.com/sheyi103/agtMiddleware/api.(*Server).createShortCode-fm (4 handlers)
-[GIN-debug] GET    /shortcode/:id            --> github.com/sheyi103/agtMiddleware/api.(*Server).getShortCode-fm (4 handlers)
-[GIN-debug] GET    /shortcode                --> github.com/sheyi103/agtMiddleware/api.(*Server).listShortCodes-fm (4 handlers)
-[GIN-debug] POST   /messages/sms/outbound    --> github.com/sheyi103/agtMiddleware/api.(*Server).sendSMS-fm (4 handlers)
-[GIN-debug] POST   /messages/ussd/outbound   --> github.com/sheyi103/agtMiddleware/api.(*Server).sendUSSD-fm (4 handlers)
+[GIN-debug] POST   /users                    --> github.com/sheyi103/agtMiddleware/api.(*Server).createUser-fm (4 handlers)
+[GIN-debug] POST   /users/login              --> github.com/sheyi103/agtMiddleware/api.(*Server).loginUser-fm (4 handlers)
+[GIN-debug] POST   /roles                    --> github.com/sheyi103/agtMiddleware/api.(*Server).createRole-fm (4 handlers)
+[GIN-debug] GET    /users/:id                --> github.com/sheyi103/agtMiddleware/api.(*Server).getUser-fm (4 handlers)
+[GIN-debug] POST   /sms/notify_url           --> github.com/sheyi103/agtMiddleware/api.(*Server).smsNotify-fm (4 handlers)
+[GIN-debug] POST   /ussd/notify_url          --> github.com/sheyi103/agtMiddleware/api.(*Server).ussdNotify-fm (4 handlers)
+[GIN-debug] POST   /madapi/datasync          --> github.com/sheyi103/agtMiddleware/api.(*Server).dataSync-fm (4 handlers)
+[GIN-debug] GET    /users                    --> github.com/sheyi103/agtMiddleware/api.(*Server).listUser-fm (5 handlers)
+[GIN-debug] GET    /roles/:id                --> github.com/sheyi103/agtMiddleware/api.(*Server).getRole-fm (5 handlers)
+[GIN-debug] GET    /roles                    --> github.com/sheyi103/agtMiddleware/api.(*Server).listRole-fm (5 handlers)
+[GIN-debug] POST   /services                 --> github.com/sheyi103/agtMiddleware/api.(*Server).createService-fm (5 handlers)
+[GIN-debug] GET    /services/:id             --> github.com/sheyi103/agtMiddleware/api.(*Server).getService-fm (5 handlers)
+[GIN-debug] GET    /services                 --> github.com/sheyi103/agtMiddleware/api.(*Server).listService-fm (5 handlers)
+[GIN-debug] POST   /shortcode                --> github.com/sheyi103/agtMiddleware/api.(*Server).createShortCode-fm (5 handlers)
+[GIN-debug] GET    /shortcode/:id            --> github.com/sheyi103/agtMiddleware/api.(*Server).getShortCode-fm (5 handlers)
+[GIN-debug] GET    /shortcode                --> github.com/sheyi103/agtMiddleware/api.(*Server).listShortCodes-fm (5 handlers)
+[GIN-debug] POST   /messages/sms/outbound    --> github.com/sheyi103/agtMiddleware/api.(*Server).sendSMS-fm (5 handlers)
+[GIN-debug] POST   /messages/ussd/outbound   --> github.com/sheyi103/agtMiddleware/api.(*Server).sendUSSD-fm (5 handlers)
+[GIN-debug] POST   /messages/sms/outbound/subscription --> github.com/sheyi103/agtMiddleware/api.(*Server).smsSubscription-fm (5 handlers)
+[GIN-debug] DELETE /messages/sms/outbound/subscription --> github.com/sheyi103/agtMiddleware/api.(*Server).smsDeleteSubscription-fm (5 handlers)
+[GIN-debug] POST   /messages/ussd/outbound/subscription --> github.com/sheyi103/agtMiddleware/api.(*Server).ussdSubscription-fm (5 handlers)
+[GIN-debug] POST   /customer/subscription    --> github.com/sheyi103/agtMiddleware/api.(*Server).customerSubscription-fm (5 handlers)
+[GIN-debug] DELETE /customer/unsubscription  --> github.com/sheyi103/agtMiddleware/api.(*Server).customerUnSubscription-fm (5 handlers)
+[GIN-debug] DELETE /messages/ussd/outbound/subscription --> github.com/sheyi103/agtMiddleware/api.(*Server).ussdDeleteSubscription-fm (5 handlers)
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on 0.0.0.0:8081
-[GIN] 2022/05/24 - 14:55:24 | 200 |    4.816618ms |   41.76.196.214 | GET      "/users/1"
-[GIN] 2022/05/24 - 14:56:08 | 200 |    4.159411ms |   41.76.196.214 | POST     "/users/login"
-[GIN] 2022/05/24 - 15:07:15 | 404 |       1.299µs |   185.173.35.41 | GET      "/"
+[GIN] 2022/06/06 - 09:29:36 | 200 |    1.2449622s |             ::1 | POST     "/customer/subscription"
+[GIN] 2022/06/06 - 09:29:49 | 200 |   47.1473924s |             ::1 | POST     "/customer/subscription"

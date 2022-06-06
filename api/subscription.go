@@ -1,31 +1,33 @@
 package api
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	db "github.com/sheyi103/agtMiddleware/db/sqlc"
 	"github.com/sheyi103/agtMiddleware/madapi"
 )
 
 type dataSyncRequest struct {
-	ServiceType   string `json:"serviceType" binding:"required"`
-	ChargingMode  string `json:"chargingMode" binding:"required"`
-	AppliedPlan   string `json:"appliedPlan" binding:"required"`
-	ContentId     string `json:"contentId" binding:"required"`
-	ResultCode    string `json:"resultCode" binding:"required"`
-	RenFlag       string `json:"renFlag" binding:"required"`
-	Result        string `json:"result" binding:"required"`
-	ValidityType  string `json:"validityType" binding:"required"`
-	SequenceNo    string `json:"sequenceNo" binding:"required"`
-	CallingParty  string `json:"callingParty" binding:"required"`
-	BearerId      string `json:"bearerId" binding:"required"`
-	OperationId   string `json:"operationId" binding:"required"`
-	RequestedPlan string `json:"requestedPlan" binding:"required"`
-	ChargeAmount  string `json:"chargeAmount" binding:"required"`
-	ServiceNode   string `json:"serviceNode" binding:"required"`
-	ServiceId     string `json:"serviceId" binding:"required"`
-	Category      string `json:"category" binding:"required"`
-	ValidityDays  string `json:"validityDays" binding:"required"`
+	ServiceType   string `json:"serviceType"`
+	ChargingMode  string `json:"chargingMode"`
+	AppliedPlan   string `json:"appliedPlan"`
+	ContentId     string `json:"contentId"`
+	ResultCode    string `json:"resultCode"`
+	RenFlag       string `json:"renFlag"`
+	Result        string `json:"result"`
+	ValidityType  string `json:"validityType"`
+	SequenceNo    string `json:"sequenceNo"`
+	CallingParty  string `json:"callingParty"`
+	BearerId      string `json:"bearerId"`
+	OperationId   string `json:"operationId"`
+	RequestedPlan string `json:"requestedPlan"`
+	ChargeAmount  string `json:"chargeAmount"`
+	ServiceNode   string `json:"serviceNode"`
+	ServiceId     string `json:"serviceId"`
+	Category      string `json:"category"`
+	ValidityDays  string `json:"validityDays"`
 }
 
 type subscriptionRequest struct {
@@ -86,8 +88,8 @@ func (server *Server) customerUnSubscription(ctx *gin.Context) {
 
 }
 
-
 func (server *Server) dataSync(ctx *gin.Context) {
+	// log.Println(ctx.Data())
 
 	var req dataSyncRequest
 
@@ -96,17 +98,50 @@ func (server *Server) dataSync(ctx *gin.Context) {
 		return
 	}
 
-	//get the shortcode
+	//check if service and product_id
+	args := db.GetServiceByServiceIdAndProductIdParams{
+		SubscriptionID:          req.ServiceId,
+		SubscriptionDescription: req.RequestedPlan,
+	}
 
-	//call sms subscription service
-	// smsSubscription, err := madapi.SMSSubscription(accessToken, req.SenderAddress, req.NotifyUrl, req.TargetSystem)
-	// if err != nil {
+	dataSyncUrl, err := server.store.GetServiceByServiceIdAndProductId(ctx, args)
+	if err != nil {
 
-	// 	ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-	// 	return
-	// }
+		ctx.JSON(http.StatusNotFound, errorResponse(err))
+		return
+	}
 
-	ctx.JSON(http.StatusOK, req)
+	log.Println(dataSyncUrl)
+	//forward request to datasync url
+
+	respAgs := madapi.DataSyncRequestParams{
+		ServiceType:   req.ServiceType,
+		ChargingMode:  req.ChargingMode,
+		AppliedPlan:   req.AppliedPlan,
+		ContentId:     req.ContentId,
+		ResultCode:    req.ResultCode,
+		RenFlag:       req.RenFlag,
+		Result:        req.Result,
+		ValidityType:  req.ValidityType,
+		SequenceNo:    req.SequenceNo,
+		CallingParty:  req.CallingParty,
+		BearerId:      req.BearerId,
+		OperationId:   req.OperationId,
+		RequestedPlan: req.RequestedPlan,
+		ChargeAmount:  req.ChargeAmount,
+		ServiceNode:   req.ServiceNode,
+		ServiceId:     req.ServiceId,
+		Category:      req.Category,
+		ValidityDays:  req.ValidityDays,
+	}
+
+	_, err = madapi.DataSyncNotification(dataSyncUrl, respAgs)
+	if err != nil {
+
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, nil)
 
 }
-

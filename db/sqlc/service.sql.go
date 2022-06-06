@@ -97,6 +97,23 @@ func (q *Queries) GetService(ctx context.Context, id int32) (Service, error) {
 	return i, err
 }
 
+const getServiceByServiceIdAndProductId = `-- name: GetServiceByServiceIdAndProductId :one
+SELECT datasync_endpoint FROM services
+WHERE subscription_id = ? && subscription_description= ? LIMIT 1
+`
+
+type GetServiceByServiceIdAndProductIdParams struct {
+	SubscriptionID          string `json:"subscription_id"`
+	SubscriptionDescription string `json:"subscription_description"`
+}
+
+func (q *Queries) GetServiceByServiceIdAndProductId(ctx context.Context, arg GetServiceByServiceIdAndProductIdParams) (string, error) {
+	row := q.db.QueryRowContext(ctx, getServiceByServiceIdAndProductId, arg.SubscriptionID, arg.SubscriptionDescription)
+	var datasync_endpoint string
+	err := row.Scan(&datasync_endpoint)
+	return datasync_endpoint, err
+}
+
 const getServiceByShortcodeId = `-- name: GetServiceByShortcodeId :one
 SELECT id, shortcode_id, user_id, service_name, service_id, service_interface, service, service_type, product_id, node_id, subscription_id, subscription_description, base_url, datasync_endpoint, notification_endpoint, network_type, created_at, updated_at FROM services
 WHERE shortcode_id = ? && service= ? && notification_endpoint IS NOT NULL LIMIT 1

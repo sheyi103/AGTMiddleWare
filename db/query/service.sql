@@ -18,6 +18,10 @@ WHERE user_id = ? && service=? LIMIT 1;
 SELECT * FROM services
 WHERE shortcode_id = ? && service= ? && notification_endpoint IS NOT NULL LIMIT 1;
 
+-- name: GetServiceByServiceIdAndProductId :one
+SELECT datasync_endpoint FROM services
+WHERE subscription_id = ? && subscription_description= ? LIMIT 1;
+
 -- name: ListService :many
 SELECT * FROM services
 ORDER BY id
