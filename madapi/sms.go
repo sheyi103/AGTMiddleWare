@@ -94,7 +94,7 @@ func SMSSubscription(accessToken string, senderAddress string, notifyUrl string,
 		log.Fatalln(err)
 	}
 
-	request, err := http.NewRequest("POST", url, bytes.NewBuffer(bytesRepresentation))
+	request, err := http.NewRequest("DELETE", url, bytes.NewBuffer(bytesRepresentation))
 	if err != nil {
 		log.Fatalln(err)
 	}
