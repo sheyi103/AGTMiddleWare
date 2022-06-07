@@ -75,7 +75,7 @@ func (server *Server) setUpRouter() {
 	authRoutes.DELETE("/messages/sms/outbound/subscription", server.smsDeleteSubscription)
 	authRoutes.POST("/messages/ussd/outbound/subscription", server.ussdSubscription)
 	authRoutes.POST("/customer/subscription", server.customerSubscription)
-	authRoutes.DELETE("/customer/unsubscription", server.customerUnSubscription)
+	authRoutes.DELETE("/customer/unsubscription", server.customerUnSubscriptn)
 	authRoutes.DELETE("/messages/ussd/outbound/subscription", server.ussdDeleteSubscription)
 
 	server.router = router

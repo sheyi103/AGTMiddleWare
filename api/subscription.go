@@ -68,7 +68,7 @@ func (server *Server) customerSubscription(ctx *gin.Context) {
 
 }
 
-func (server *Server) customerUnSubscription(ctx *gin.Context) {
+func (server *Server) customerUnSubscriptn(ctx *gin.Context) {
 	var req unSubscriptionRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
